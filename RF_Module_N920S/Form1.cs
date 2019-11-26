@@ -41,15 +41,8 @@ namespace RF_Module_N920S
         {
             if (serialPort1.IsOpen)
             {
-                bgWorker_Read.CancelAsync();
-                bgWorker_Write.CancelAsync();
-                serialPort1.Close();
+                Environment.Exit(Environment.ExitCode);
             }
-        }
-
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-        {
-
         }
 
         private void Connect_btu_Click(object sender, EventArgs e)
@@ -65,7 +58,7 @@ namespace RF_Module_N920S
             }
             finally
             {
-                if (!bgWorker_Read.IsBusy)
+                if (!bgWorker_Read.IsBusy & !bgWorker_Write.IsBusy)
                 {
                     bgWorker_Read.RunWorkerAsync();
                     bgWorker_Write.RunWorkerAsync();
@@ -94,6 +87,7 @@ namespace RF_Module_N920S
             {
                 bgWorker_Read.CancelAsync();
                 bgWorker_Write.CancelAsync();
+
                 serialPort1.Close();
             }
 
@@ -104,7 +98,7 @@ namespace RF_Module_N920S
             Connect_btu.Enabled = true;
             Disconnect_btu.Enabled = false;
         }
-
+        //----------------------------------------------------------------------------------------
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             while (bgWorker_Read.CancellationPending != true)
@@ -114,11 +108,10 @@ namespace RF_Module_N920S
                 {
                     if (serialPort1.BytesToRead != 0)
                     {
-
                         rx = serialPort1.ReadExisting();
                         bgWorker_Read.ReportProgress(0);
                     }
-                }  
+                }
             }
         }
 
@@ -128,26 +121,24 @@ namespace RF_Module_N920S
             textBox1.AppendText(rx);
         }
 
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void bgWorker_Read_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
         }
-
-        private void SEND_btu_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        //----------------------------------------------------------------------------------------
         private void bgWorker_write_DoWork(object sender, DoWorkEventArgs e)
         {
             while (bgWorker_Write.CancellationPending != true)
             {
-                if (textBox2.Text != "")
+                if (serialPort1.IsOpen)
                 {
-                    //Thread.Sleep(100);
-                    tx = textBox2.Text;
-                    serialPort1.Write(tx);
-                    bgWorker_Write.ReportProgress(0);
+                    if (textBox2.Text != "")
+                    {
+                        //Thread.Sleep(100);
+                        tx = textBox2.Text;
+                        serialPort1.Write(tx);
+                        bgWorker_Write.ReportProgress(0);
+                    }
                 }
             }
         }
@@ -157,6 +148,11 @@ namespace RF_Module_N920S
             textBox2.Clear();
         }
 
+        private void bgWorker_Write_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+
+        }
+        //--------------------------------------三個按鈕--------------------------------------------
         private void Command_btu_Click(object sender, EventArgs e)
         {
             textBox2.Text = "+++";

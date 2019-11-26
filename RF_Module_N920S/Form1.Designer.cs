@@ -204,7 +204,7 @@
             this.bgWorker_Read.WorkerSupportsCancellation = true;
             this.bgWorker_Read.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
             this.bgWorker_Read.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            this.bgWorker_Read.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            this.bgWorker_Read.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_Read_RunWorkerCompleted);
             // 
             // bgWorker_Write
             // 
@@ -212,6 +212,7 @@
             this.bgWorker_Write.WorkerSupportsCancellation = true;
             this.bgWorker_Write.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_write_DoWork);
             this.bgWorker_Write.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgWorker_write_ProgressChanged);
+            this.bgWorker_Write.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_Write_RunWorkerCompleted);
             // 
             // groupBox1
             // 
@@ -245,7 +246,6 @@
             this.Name = "Form1";
             this.Text = "N920S Interface";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Control.ResumeLayout(false);
             this.Connect.ResumeLayout(false);
