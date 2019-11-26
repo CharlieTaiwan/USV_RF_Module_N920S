@@ -49,12 +49,38 @@ namespace RF_Module_N920S
         {
             try
             {
-                if (!serialPort1.IsOpen)
+                serialPort1.PortName = ComPort.Text;
+                serialPort1.BaudRate = Int32.Parse(BaudRate.Text);
+                try
                 {
-                    serialPort1.PortName = ComPort.Text;
-                    serialPort1.BaudRate = Int32.Parse(BaudRate.Text);
                     serialPort1.Open();
                 }
+                catch
+                {
+                    var result = MessageBox.Show("串列埠已經被占用，請重新選擇串列埠!!!","無法建立連線",MessageBoxButtons.AbortRetryIgnore);
+
+                    if (result == DialogResult.Abort)
+                    {
+                        Close();
+                    }
+                    else if (result == DialogResult.Ignore)
+                    {
+                        MessageBox.Show("程式繼續執行但未與裝置建立連線，建議重新執行程式!!!", "無法建立連線");
+                    }
+                    else if (result == DialogResult.Retry)
+                    {
+                        try
+                        {
+                            serialPort1.Open();
+                        }
+                        catch
+                        {
+                            MessageBox.Show("無法建立連線，程式即將關閉!!", "無法建立連線");
+                            Close();
+                        }
+                    }
+                }
+                
             }
             finally
             {
@@ -89,6 +115,11 @@ namespace RF_Module_N920S
                 bgWorker_Write.CancelAsync();
 
                 serialPort1.Close();
+            }
+            else
+            {
+                bgWorker_Read.CancelAsync();
+                bgWorker_Write.CancelAsync();
             }
 
             Command_btu.Enabled = false;
