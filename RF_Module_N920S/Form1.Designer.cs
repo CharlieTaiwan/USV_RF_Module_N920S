@@ -34,15 +34,16 @@
             this.Connect_btu = new System.Windows.Forms.Button();
             this.Control = new System.Windows.Forms.GroupBox();
             this.Connect = new System.Windows.Forms.GroupBox();
+            this.SEND_btu = new System.Windows.Forms.Button();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.Disconnect_btu = new System.Windows.Forms.Button();
+            this.ComPort = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.BaudRate = new System.Windows.Forms.ComboBox();
-            this.Disconnect_btu = new System.Windows.Forms.Button();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
-            this.SEND_btu = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.ComPort = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.bgWorker_Read = new System.ComponentModel.BackgroundWorker();
+            this.bgWorker_Write = new System.ComponentModel.BackgroundWorker();
             this.Control.SuspendLayout();
             this.Connect.SuspendLayout();
             this.SuspendLayout();
@@ -102,6 +103,51 @@
             this.Connect.TabStop = false;
             this.Connect.Text = "Connect";
             // 
+            // SEND_btu
+            // 
+            this.SEND_btu.Location = new System.Drawing.Point(6, 125);
+            this.SEND_btu.Name = "SEND_btu";
+            this.SEND_btu.Size = new System.Drawing.Size(326, 40);
+            this.SEND_btu.TabIndex = 5;
+            this.SEND_btu.Text = "SEND";
+            this.SEND_btu.UseVisualStyleBackColor = true;
+            this.SEND_btu.Click += new System.EventHandler(this.SEND_btu_Click);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(88, 30);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(50, 12);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Com Port";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(88, 30);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(0, 12);
+            this.label5.TabIndex = 9;
+            // 
+            // Disconnect_btu
+            // 
+            this.Disconnect_btu.Location = new System.Drawing.Point(172, 79);
+            this.Disconnect_btu.Name = "Disconnect_btu";
+            this.Disconnect_btu.Size = new System.Drawing.Size(160, 40);
+            this.Disconnect_btu.TabIndex = 3;
+            this.Disconnect_btu.Text = "Disconnect";
+            this.Disconnect_btu.UseVisualStyleBackColor = true;
+            this.Disconnect_btu.Click += new System.EventHandler(this.Disconnect_btu_Click);
+            // 
+            // ComPort
+            // 
+            this.ComPort.FormattingEnabled = true;
+            this.ComPort.Location = new System.Drawing.Point(148, 27);
+            this.ComPort.Name = "ComPort";
+            this.ComPort.Size = new System.Drawing.Size(184, 20);
+            this.ComPort.TabIndex = 8;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -124,58 +170,20 @@
             this.BaudRate.Size = new System.Drawing.Size(184, 20);
             this.BaudRate.TabIndex = 0;
             // 
-            // Disconnect_btu
+            // bgWorker_Read
             // 
-            this.Disconnect_btu.Location = new System.Drawing.Point(172, 79);
-            this.Disconnect_btu.Name = "Disconnect_btu";
-            this.Disconnect_btu.Size = new System.Drawing.Size(160, 40);
-            this.Disconnect_btu.TabIndex = 3;
-            this.Disconnect_btu.Text = "Disconnect";
-            this.Disconnect_btu.UseVisualStyleBackColor = true;
-            this.Disconnect_btu.Click += new System.EventHandler(this.Disconnect_btu_Click);
+            this.bgWorker_Read.WorkerReportsProgress = true;
+            this.bgWorker_Read.WorkerSupportsCancellation = true;
+            this.bgWorker_Read.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+            this.bgWorker_Read.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
+            this.bgWorker_Read.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
             // 
-            // SEND_btu
+            // bgWorker_Write
             // 
-            this.SEND_btu.Location = new System.Drawing.Point(6, 125);
-            this.SEND_btu.Name = "SEND_btu";
-            this.SEND_btu.Size = new System.Drawing.Size(326, 40);
-            this.SEND_btu.TabIndex = 5;
-            this.SEND_btu.Text = "SEND";
-            this.SEND_btu.UseVisualStyleBackColor = true;
-            this.SEND_btu.Click += new System.EventHandler(this.SEND_btu_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(88, 30);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(0, 12);
-            this.label5.TabIndex = 9;
-            // 
-            // ComPort
-            // 
-            this.ComPort.FormattingEnabled = true;
-            this.ComPort.Location = new System.Drawing.Point(148, 27);
-            this.ComPort.Name = "ComPort";
-            this.ComPort.Size = new System.Drawing.Size(184, 20);
-            this.ComPort.TabIndex = 8;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(88, 30);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(50, 12);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "Com Port";
-            // 
-            // backgroundWorker1
-            // 
-            this.backgroundWorker1.WorkerReportsProgress = true;
-            this.backgroundWorker1.WorkerSupportsCancellation = true;
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker1_ProgressChanged);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_RunWorkerCompleted);
+            this.bgWorker_Write.WorkerReportsProgress = true;
+            this.bgWorker_Write.WorkerSupportsCancellation = true;
+            this.bgWorker_Write.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_write_DoWork);
+            this.bgWorker_Write.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgWorker_write_ProgressChanged);
             // 
             // Form1
             // 
@@ -211,7 +219,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox ComPort;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.ComponentModel.BackgroundWorker bgWorker_Read;
+        private System.ComponentModel.BackgroundWorker bgWorker_Write;
     }
 }
 

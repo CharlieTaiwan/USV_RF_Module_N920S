@@ -15,8 +15,9 @@ namespace RF_Module_N920S
 {
     public partial class Form1 : Form
     {
-        string rx = "";
         string tx = "";
+        string rx = "";
+        
         public Form1()
         {
             InitializeComponent();
@@ -44,14 +45,18 @@ namespace RF_Module_N920S
             }
             finally
             {
-                if (!backgroundWorker1.IsBusy)
+                if (!bgWorker_Read.IsBusy)
                 {
-                    backgroundWorker1.RunWorkerAsync();
+                    bgWorker_Read.RunWorkerAsync();
+                    bgWorker_Write.RunWorkerAsync();
                 }
                 else
                 {
-                    backgroundWorker1.CancelAsync();
-                    backgroundWorker1.RunWorkerAsync();
+                    bgWorker_Read.CancelAsync();
+                    bgWorker_Read.RunWorkerAsync();
+
+                    bgWorker_Write.CancelAsync();
+                    bgWorker_Write.RunWorkerAsync();
                 }
             }
             Connect_btu.Enabled = false;
@@ -62,7 +67,8 @@ namespace RF_Module_N920S
         {
             if (serialPort1.IsOpen)
             {
-                backgroundWorker1.CancelAsync();
+                bgWorker_Read.CancelAsync();
+                bgWorker_Write.CancelAsync();
                 serialPort1.Close();
             }
             Connect_btu.Enabled = true;
@@ -71,14 +77,14 @@ namespace RF_Module_N920S
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            while(backgroundWorker1.CancellationPending != true)
+            while (bgWorker_Read.CancellationPending != true)
             {
                 //Thread.Sleep(100);
                 if (serialPort1.BytesToRead != 0)
                 {
 
                     rx = serialPort1.ReadExisting();
-                    backgroundWorker1.ReportProgress(0);
+                    bgWorker_Read.ReportProgress(0);
                 }
             }
         }
@@ -97,6 +103,22 @@ namespace RF_Module_N920S
         private void SEND_btu_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void bgWorker_write_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (bgWorker_Write.CancellationPending != true)
+            {
+                //Thread.Sleep(100);
+                tx = textBox2.Text;
+                serialPort1.Write(tx);
+                bgWorker_Write.ReportProgress(0);
+            }
+        }
+
+        private void bgWorker_write_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            //textBox2.Clear();
         }
     }
 }
