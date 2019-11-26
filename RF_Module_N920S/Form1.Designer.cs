@@ -33,8 +33,10 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.Connect_btu = new System.Windows.Forms.Button();
             this.Control = new System.Windows.Forms.GroupBox();
+            this.Configurtion_btu = new System.Windows.Forms.Button();
+            this.Data_btu = new System.Windows.Forms.Button();
+            this.Command_btu = new System.Windows.Forms.Button();
             this.Connect = new System.Windows.Forms.GroupBox();
-            this.SEND_btu = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.Disconnect_btu = new System.Windows.Forms.Button();
@@ -44,26 +46,29 @@
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.bgWorker_Read = new System.ComponentModel.BackgroundWorker();
             this.bgWorker_Write = new System.ComponentModel.BackgroundWorker();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.Control.SuspendLayout();
             this.Connect.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(12, 98);
+            this.textBox1.Location = new System.Drawing.Point(6, 21);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(691, 449);
+            this.textBox1.Size = new System.Drawing.Size(623, 368);
             this.textBox1.TabIndex = 0;
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(12, 12);
+            this.textBox2.Location = new System.Drawing.Point(6, 21);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
-            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Size = new System.Drawing.Size(691, 80);
+            this.textBox2.Size = new System.Drawing.Size(367, 62);
             this.textBox2.TabIndex = 1;
             // 
             // Connect_btu
@@ -78,17 +83,50 @@
             // 
             // Control
             // 
+            this.Control.Controls.Add(this.Configurtion_btu);
+            this.Control.Controls.Add(this.Data_btu);
+            this.Control.Controls.Add(this.Command_btu);
             this.Control.Controls.Add(this.Connect);
-            this.Control.Location = new System.Drawing.Point(709, 12);
+            this.Control.Font = new System.Drawing.Font("新細明體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Control.Location = new System.Drawing.Point(653, 12);
             this.Control.Name = "Control";
-            this.Control.Size = new System.Drawing.Size(355, 535);
+            this.Control.Size = new System.Drawing.Size(355, 490);
             this.Control.TabIndex = 3;
             this.Control.TabStop = false;
             this.Control.Text = "Control";
             // 
+            // Configurtion_btu
+            // 
+            this.Configurtion_btu.Location = new System.Drawing.Point(14, 201);
+            this.Configurtion_btu.Name = "Configurtion_btu";
+            this.Configurtion_btu.Size = new System.Drawing.Size(160, 40);
+            this.Configurtion_btu.TabIndex = 7;
+            this.Configurtion_btu.Text = "Configuration";
+            this.Configurtion_btu.UseVisualStyleBackColor = true;
+            this.Configurtion_btu.Click += new System.EventHandler(this.Configurtion_btu_Click);
+            // 
+            // Data_btu
+            // 
+            this.Data_btu.Location = new System.Drawing.Point(180, 155);
+            this.Data_btu.Name = "Data_btu";
+            this.Data_btu.Size = new System.Drawing.Size(160, 40);
+            this.Data_btu.TabIndex = 6;
+            this.Data_btu.Text = "Data Mode";
+            this.Data_btu.UseVisualStyleBackColor = true;
+            this.Data_btu.Click += new System.EventHandler(this.Data_btu_Click);
+            // 
+            // Command_btu
+            // 
+            this.Command_btu.Location = new System.Drawing.Point(14, 155);
+            this.Command_btu.Name = "Command_btu";
+            this.Command_btu.Size = new System.Drawing.Size(160, 40);
+            this.Command_btu.TabIndex = 5;
+            this.Command_btu.Text = "Command Mode";
+            this.Command_btu.UseVisualStyleBackColor = true;
+            this.Command_btu.Click += new System.EventHandler(this.Command_btu_Click);
+            // 
             // Connect
             // 
-            this.Connect.Controls.Add(this.SEND_btu);
             this.Connect.Controls.Add(this.label6);
             this.Connect.Controls.Add(this.label5);
             this.Connect.Controls.Add(this.Disconnect_btu);
@@ -96,22 +134,12 @@
             this.Connect.Controls.Add(this.Connect_btu);
             this.Connect.Controls.Add(this.label1);
             this.Connect.Controls.Add(this.BaudRate);
-            this.Connect.Location = new System.Drawing.Point(6, 21);
+            this.Connect.Location = new System.Drawing.Point(8, 21);
             this.Connect.Name = "Connect";
-            this.Connect.Size = new System.Drawing.Size(341, 171);
+            this.Connect.Size = new System.Drawing.Size(341, 128);
             this.Connect.TabIndex = 4;
             this.Connect.TabStop = false;
             this.Connect.Text = "Connect";
-            // 
-            // SEND_btu
-            // 
-            this.SEND_btu.Location = new System.Drawing.Point(6, 125);
-            this.SEND_btu.Name = "SEND_btu";
-            this.SEND_btu.Size = new System.Drawing.Size(326, 40);
-            this.SEND_btu.TabIndex = 5;
-            this.SEND_btu.Text = "SEND";
-            this.SEND_btu.UseVisualStyleBackColor = true;
-            this.SEND_btu.Click += new System.EventHandler(this.SEND_btu_Click);
             // 
             // label6
             // 
@@ -185,22 +213,48 @@
             this.bgWorker_Write.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_write_DoWork);
             this.bgWorker_Write.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgWorker_write_ProgressChanged);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.textBox2);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(379, 89);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Input";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Location = new System.Drawing.Point(12, 107);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(635, 395);
+            this.groupBox2.TabIndex = 5;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Output";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1073, 559);
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(1018, 509);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Control);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "N920S Interface";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Control.ResumeLayout(false);
             this.Connect.ResumeLayout(false);
             this.Connect.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -215,12 +269,16 @@
         private System.Windows.Forms.ComboBox BaudRate;
         private System.Windows.Forms.Button Disconnect_btu;
         private System.IO.Ports.SerialPort serialPort1;
-        private System.Windows.Forms.Button SEND_btu;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ComboBox ComPort;
         private System.ComponentModel.BackgroundWorker bgWorker_Read;
         private System.ComponentModel.BackgroundWorker bgWorker_Write;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button Data_btu;
+        private System.Windows.Forms.Button Command_btu;
+        private System.Windows.Forms.Button Configurtion_btu;
     }
 }
 

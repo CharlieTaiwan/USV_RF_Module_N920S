@@ -28,8 +28,28 @@ namespace RF_Module_N920S
             ComPort.Items.AddRange(SerialPort.GetPortNames());
             ComPort.SelectedIndex = 0;
             BaudRate.SelectedIndex = 0;
+
             Connect_btu.Enabled = true;
-            Disconnect_btu.Enabled = true;
+            Disconnect_btu.Enabled = false;
+
+            Command_btu.Enabled = false;
+            Data_btu.Enabled = false;
+            Configurtion_btu.Enabled = false;
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                bgWorker_Read.CancelAsync();
+                bgWorker_Write.CancelAsync();
+                serialPort1.Close();
+            }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
         }
 
         private void Connect_btu_Click(object sender, EventArgs e)
@@ -59,6 +79,11 @@ namespace RF_Module_N920S
                     bgWorker_Write.RunWorkerAsync();
                 }
             }
+
+            Command_btu.Enabled = true;
+            Data_btu.Enabled = false;
+            Configurtion_btu.Enabled = false;
+
             Connect_btu.Enabled = false;
             Disconnect_btu.Enabled = true;
         }
@@ -71,6 +96,11 @@ namespace RF_Module_N920S
                 bgWorker_Write.CancelAsync();
                 serialPort1.Close();
             }
+
+            Command_btu.Enabled = false;
+            Data_btu.Enabled = false;
+            Configurtion_btu.Enabled = false;
+
             Connect_btu.Enabled = true;
             Disconnect_btu.Enabled = false;
         }
@@ -79,13 +109,16 @@ namespace RF_Module_N920S
         {
             while (bgWorker_Read.CancellationPending != true)
             {
-                //Thread.Sleep(100);
-                if (serialPort1.BytesToRead != 0)
+                Thread.Sleep(100);
+                if (serialPort1.IsOpen)
                 {
+                    if (serialPort1.BytesToRead != 0)
+                    {
 
-                    rx = serialPort1.ReadExisting();
-                    bgWorker_Read.ReportProgress(0);
-                }
+                        rx = serialPort1.ReadExisting();
+                        bgWorker_Read.ReportProgress(0);
+                    }
+                }  
             }
         }
 
@@ -109,16 +142,42 @@ namespace RF_Module_N920S
         {
             while (bgWorker_Write.CancellationPending != true)
             {
-                //Thread.Sleep(100);
-                tx = textBox2.Text;
-                serialPort1.Write(tx);
-                bgWorker_Write.ReportProgress(0);
+                if (textBox2.Text != "")
+                {
+                    //Thread.Sleep(100);
+                    tx = textBox2.Text;
+                    serialPort1.Write(tx);
+                    bgWorker_Write.ReportProgress(0);
+                }
             }
         }
 
         private void bgWorker_write_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            //textBox2.Clear();
+            textBox2.Clear();
+        }
+
+        private void Command_btu_Click(object sender, EventArgs e)
+        {
+            textBox2.Text = "+++";
+
+            Command_btu.Enabled = false;
+            Data_btu.Enabled = true;
+            Configurtion_btu.Enabled = true;
+        }
+
+        private void Data_btu_Click(object sender, EventArgs e)
+        {
+            textBox2.Text = "ATA\r\n";
+
+            Command_btu.Enabled = true;
+            Data_btu.Enabled = false;
+            Configurtion_btu.Enabled = false;
+        }
+
+        private void Configurtion_btu_Click(object sender, EventArgs e)
+        {
+            textBox2.Text = "AT&V\r\n";
         }
     }
 }
