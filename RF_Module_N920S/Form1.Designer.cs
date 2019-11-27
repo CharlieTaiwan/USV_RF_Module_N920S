@@ -37,6 +37,7 @@
             this.Data_btu = new System.Windows.Forms.Button();
             this.Command_btu = new System.Windows.Forms.Button();
             this.Connect = new System.Windows.Forms.GroupBox();
+            this.RE_btu = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.Disconnect_btu = new System.Windows.Forms.Button();
@@ -48,7 +49,7 @@
             this.bgWorker_Write = new System.ComponentModel.BackgroundWorker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.RE_btu = new System.Windows.Forms.Button();
+            this.Clear_btu = new System.Windows.Forms.Button();
             this.Control.SuspendLayout();
             this.Connect.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -84,6 +85,7 @@
             // 
             // Control
             // 
+            this.Control.Controls.Add(this.Clear_btu);
             this.Control.Controls.Add(this.Configurtion_btu);
             this.Control.Controls.Add(this.Data_btu);
             this.Control.Controls.Add(this.Command_btu);
@@ -142,6 +144,16 @@
             this.Connect.TabIndex = 4;
             this.Connect.TabStop = false;
             this.Connect.Text = "Connect";
+            // 
+            // RE_btu
+            // 
+            this.RE_btu.Location = new System.Drawing.Point(303, 27);
+            this.RE_btu.Name = "RE_btu";
+            this.RE_btu.Size = new System.Drawing.Size(29, 20);
+            this.RE_btu.TabIndex = 6;
+            this.RE_btu.Text = "R";
+            this.RE_btu.UseVisualStyleBackColor = true;
+            this.RE_btu.Click += new System.EventHandler(this.RE_btu_Click);
             // 
             // label6
             // 
@@ -236,15 +248,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Output";
             // 
-            // RE_btu
+            // Clear_btu
             // 
-            this.RE_btu.Location = new System.Drawing.Point(303, 27);
-            this.RE_btu.Name = "RE_btu";
-            this.RE_btu.Size = new System.Drawing.Size(29, 20);
-            this.RE_btu.TabIndex = 6;
-            this.RE_btu.Text = "R";
-            this.RE_btu.UseVisualStyleBackColor = true;
-            this.RE_btu.Click += new System.EventHandler(this.RE_btu_Click);
+            this.Clear_btu.Location = new System.Drawing.Point(14, 444);
+            this.Clear_btu.Name = "Clear_btu";
+            this.Clear_btu.Size = new System.Drawing.Size(160, 40);
+            this.Clear_btu.TabIndex = 8;
+            this.Clear_btu.Text = "Clear ";
+            this.Clear_btu.UseVisualStyleBackColor = true;
+            this.Clear_btu.Click += new System.EventHandler(this.Clear_btu_Click);
             // 
             // Form1
             // 
@@ -292,6 +304,7 @@
         private System.Windows.Forms.Button Command_btu;
         private System.Windows.Forms.Button Configurtion_btu;
         private System.Windows.Forms.Button RE_btu;
+        private System.Windows.Forms.Button Clear_btu;
     }
 }
 

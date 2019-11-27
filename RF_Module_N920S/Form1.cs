@@ -223,5 +223,10 @@ namespace RF_Module_N920S
             ComPort.SelectedIndex = 0;
             Connect_btu.Enabled = true;
         }
+
+        private void Clear_btu_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+        }
     }
 }
