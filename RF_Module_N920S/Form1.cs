@@ -26,10 +26,19 @@ namespace RF_Module_N920S
         private void Form1_Load(object sender, EventArgs e)
         {
             ComPort.Items.AddRange(SerialPort.GetPortNames());
-            ComPort.SelectedIndex = 0;
+
+            if (ComPort.Items.Count > 0)
+            {
+                ComPort.SelectedIndex = 0;
+                Connect_btu.Enabled = true;
+            }
+            else
+            {
+                Connect_btu.Enabled = false;
+            }
+
             BaudRate.SelectedIndex = 0;
 
-            Connect_btu.Enabled = true;
             Disconnect_btu.Enabled = false;
 
             Command_btu.Enabled = false;
@@ -205,6 +214,14 @@ namespace RF_Module_N920S
         private void Configurtion_btu_Click(object sender, EventArgs e)
         {
             textBox2.Text = "AT&V\r\n";
+        }
+
+        private void RE_btu_Click(object sender, EventArgs e)
+        {
+            ComPort.Items.Clear();
+            ComPort.Items.AddRange(SerialPort.GetPortNames());
+            ComPort.SelectedIndex = 0;
+            Connect_btu.Enabled = true;
         }
     }
 }

@@ -48,6 +48,7 @@
             this.bgWorker_Write = new System.ComponentModel.BackgroundWorker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.RE_btu = new System.Windows.Forms.Button();
             this.Control.SuspendLayout();
             this.Connect.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -127,6 +128,7 @@
             // 
             // Connect
             // 
+            this.Connect.Controls.Add(this.RE_btu);
             this.Connect.Controls.Add(this.label6);
             this.Connect.Controls.Add(this.label5);
             this.Connect.Controls.Add(this.Disconnect_btu);
@@ -144,7 +146,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(88, 30);
+            this.label6.Location = new System.Drawing.Point(53, 30);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(50, 12);
             this.label6.TabIndex = 10;
@@ -153,7 +155,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(88, 30);
+            this.label5.Location = new System.Drawing.Point(53, 30);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(0, 12);
             this.label5.TabIndex = 9;
@@ -171,7 +173,7 @@
             // ComPort
             // 
             this.ComPort.FormattingEnabled = true;
-            this.ComPort.Location = new System.Drawing.Point(148, 27);
+            this.ComPort.Location = new System.Drawing.Point(113, 27);
             this.ComPort.Name = "ComPort";
             this.ComPort.Size = new System.Drawing.Size(184, 20);
             this.ComPort.TabIndex = 8;
@@ -179,7 +181,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(88, 56);
+            this.label1.Location = new System.Drawing.Point(49, 56);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(54, 12);
             this.label1.TabIndex = 4;
@@ -193,7 +195,7 @@
             "14400",
             "19200",
             "28800"});
-            this.BaudRate.Location = new System.Drawing.Point(148, 53);
+            this.BaudRate.Location = new System.Drawing.Point(113, 53);
             this.BaudRate.Name = "BaudRate";
             this.BaudRate.Size = new System.Drawing.Size(184, 20);
             this.BaudRate.TabIndex = 0;
@@ -233,6 +235,16 @@
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Output";
+            // 
+            // RE_btu
+            // 
+            this.RE_btu.Location = new System.Drawing.Point(303, 27);
+            this.RE_btu.Name = "RE_btu";
+            this.RE_btu.Size = new System.Drawing.Size(29, 20);
+            this.RE_btu.TabIndex = 6;
+            this.RE_btu.Text = "R";
+            this.RE_btu.UseVisualStyleBackColor = true;
+            this.RE_btu.Click += new System.EventHandler(this.RE_btu_Click);
             // 
             // Form1
             // 
@@ -279,6 +291,7 @@
         private System.Windows.Forms.Button Data_btu;
         private System.Windows.Forms.Button Command_btu;
         private System.Windows.Forms.Button Configurtion_btu;
+        private System.Windows.Forms.Button RE_btu;
     }
 }
 
