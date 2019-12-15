@@ -33,6 +33,10 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.Connect_btu = new System.Windows.Forms.Button();
             this.Control = new System.Windows.Forms.GroupBox();
+            this.file_control = new System.Windows.Forms.GroupBox();
+            this.Send = new System.Windows.Forms.Button();
+            this.Load_file = new System.Windows.Forms.Button();
+            this.Clear_btu = new System.Windows.Forms.Button();
             this.Configurtion_btu = new System.Windows.Forms.Button();
             this.Data_btu = new System.Windows.Forms.Button();
             this.Command_btu = new System.Windows.Forms.Button();
@@ -49,8 +53,10 @@
             this.bgWorker_Write = new System.ComponentModel.BackgroundWorker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.Clear_btu = new System.Windows.Forms.Button();
+            this.bgWorker_Writetomofile = new System.ComponentModel.BackgroundWorker();
+            this.bgWorker_Writerestatus = new System.ComponentModel.BackgroundWorker();
             this.Control.SuspendLayout();
+            this.file_control.SuspendLayout();
             this.Connect.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -85,6 +91,7 @@
             // 
             // Control
             // 
+            this.Control.Controls.Add(this.file_control);
             this.Control.Controls.Add(this.Clear_btu);
             this.Control.Controls.Add(this.Configurtion_btu);
             this.Control.Controls.Add(this.Data_btu);
@@ -97,6 +104,47 @@
             this.Control.TabIndex = 3;
             this.Control.TabStop = false;
             this.Control.Text = "Control";
+            // 
+            // file_control
+            // 
+            this.file_control.Controls.Add(this.Send);
+            this.file_control.Controls.Add(this.Load_file);
+            this.file_control.Location = new System.Drawing.Point(8, 293);
+            this.file_control.Name = "file_control";
+            this.file_control.Size = new System.Drawing.Size(341, 145);
+            this.file_control.TabIndex = 10;
+            this.file_control.TabStop = false;
+            this.file_control.Text = "file_control";
+            // 
+            // Send
+            // 
+            this.Send.Location = new System.Drawing.Point(172, 99);
+            this.Send.Name = "Send";
+            this.Send.Size = new System.Drawing.Size(160, 40);
+            this.Send.TabIndex = 12;
+            this.Send.Text = "Send";
+            this.Send.UseVisualStyleBackColor = true;
+            this.Send.Click += new System.EventHandler(this.Send_Click);
+            // 
+            // Load_file
+            // 
+            this.Load_file.Location = new System.Drawing.Point(6, 21);
+            this.Load_file.Name = "Load_file";
+            this.Load_file.Size = new System.Drawing.Size(160, 40);
+            this.Load_file.TabIndex = 11;
+            this.Load_file.Text = "Load_file";
+            this.Load_file.UseVisualStyleBackColor = true;
+            this.Load_file.Click += new System.EventHandler(this.Load_file_Click);
+            // 
+            // Clear_btu
+            // 
+            this.Clear_btu.Location = new System.Drawing.Point(14, 444);
+            this.Clear_btu.Name = "Clear_btu";
+            this.Clear_btu.Size = new System.Drawing.Size(160, 40);
+            this.Clear_btu.TabIndex = 8;
+            this.Clear_btu.Text = "Clear ";
+            this.Clear_btu.UseVisualStyleBackColor = true;
+            this.Clear_btu.Click += new System.EventHandler(this.Clear_btu_Click);
             // 
             // Configurtion_btu
             // 
@@ -248,15 +296,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Output";
             // 
-            // Clear_btu
+            // bgWorker_Writetomofile
             // 
-            this.Clear_btu.Location = new System.Drawing.Point(14, 444);
-            this.Clear_btu.Name = "Clear_btu";
-            this.Clear_btu.Size = new System.Drawing.Size(160, 40);
-            this.Clear_btu.TabIndex = 8;
-            this.Clear_btu.Text = "Clear ";
-            this.Clear_btu.UseVisualStyleBackColor = true;
-            this.Clear_btu.Click += new System.EventHandler(this.Clear_btu_Click);
+            this.bgWorker_Writetomofile.WorkerSupportsCancellation = true;
+            this.bgWorker_Writetomofile.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_Writetomofile_DoWork);
+            this.bgWorker_Writetomofile.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_Writetomofile_RunWorkerCompleted);
+            // 
+            // bgWorker_Writerestatus
+            // 
+            this.bgWorker_Writerestatus.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork_1);
+            this.bgWorker_Writerestatus.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_Writerestatus_RunWorkerCompleted);
             // 
             // Form1
             // 
@@ -272,6 +321,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Control.ResumeLayout(false);
+            this.file_control.ResumeLayout(false);
             this.Connect.ResumeLayout(false);
             this.Connect.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -305,6 +355,11 @@
         private System.Windows.Forms.Button Configurtion_btu;
         private System.Windows.Forms.Button RE_btu;
         private System.Windows.Forms.Button Clear_btu;
+        private System.Windows.Forms.GroupBox file_control;
+        private System.Windows.Forms.Button Load_file;
+        private System.Windows.Forms.Button Send;
+        private System.ComponentModel.BackgroundWorker bgWorker_Writetomofile;
+        private System.ComponentModel.BackgroundWorker bgWorker_Writerestatus;
     }
 }
 
