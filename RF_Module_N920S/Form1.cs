@@ -22,7 +22,11 @@ namespace RF_Module_N920S
         
         //---接收變數---
         string rx = "";
-        readonly byte[] file_rx = new Byte[1024];
+        byte[] file_rx = new Byte[1024];
+        string file_name;
+        string file_length;
+
+        List<byte> rx_Lists = new List<byte>();
 
         public Form1()
         {
@@ -152,8 +156,7 @@ namespace RF_Module_N920S
             string read_mode = "empty";
             string check_code = "empty";
             string[] check_code_array;
-            string file_name;
-            string file_length = "0";
+            
             int file_length_int = 0;
 
 
@@ -236,9 +239,34 @@ namespace RF_Module_N920S
                     }
                     else if(readingFromBuffer == "final")
                     {
+                        MessageBox.Show(Convert.ToString(rx_Lists.Count));
                         serialPort1.Read(file_rx, 0, file_rx.Length);
+                        //-----------------
+                        StreamWriter sq = new StreamWriter(@"C:\Users\mth35\Desktop\test");
+                        foreach (int i in file_rx)
+                        {
+                            sq.Write(Convert.ToChar(i));
+                        }
+                        sq.Close();
+                        //-----------------
+                        //-----------------
+                        StreamWriter sa = new StreamWriter(@"C:\Users\mth35\Desktop\test01");
+                        foreach (int i in file_rx)
+                        {
+                            sa.Write(Convert.ToChar(i));
+                        }
+                        sa.Close();
+                        //-----------------
                         rx_Lists.AddRange(file_rx);
                         rx_Lists.RemoveRange(Convert.ToInt32(file_length), rx_Lists.Count - Convert.ToInt32(file_length));
+                        //-----------------
+                        StreamWriter sv = new StreamWriter(@"C:\Users\mth35\Desktop\test02");
+                        foreach (int i in rx_Lists)
+                        {
+                            sv.Write(Convert.ToChar(i));
+                        }
+                        sv.Close();
+                        //-----------------
                         bgWorker_Read.ReportProgress(0);
                         read_mode = "empty";
                     }
@@ -251,7 +279,6 @@ namespace RF_Module_N920S
                 }
             }
         }
-        List<byte> rx_Lists = new List<byte>();
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -265,7 +292,7 @@ namespace RF_Module_N920S
                 textBox1.AppendText(Convert.ToString(rx_Lists.Count));
                 if (rx_Lists.Count > 14336)
                 {
-                    StreamWriter sw = new StreamWriter(@"C:\Users\mth35\Desktop\DEF.txt");
+                    StreamWriter sw = new StreamWriter(@"C:\Users\mth35\Desktop\" + "re" + file_name);
                     foreach(int i in rx_Lists)
                     {
                         sw.Write(Convert.ToChar(i));
