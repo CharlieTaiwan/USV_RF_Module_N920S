@@ -239,28 +239,28 @@ namespace RF_Module_N920S
                     }
                     else if(readingFromBuffer == "final")
                     {
-                        MessageBox.Show(Convert.ToString(rx_Lists.Count));
+                        MessageBox.Show(Convert.ToString(rx_Lists[14335]));
                         serialPort1.Read(file_rx, 0, file_rx.Length);
-                        //-----------------
-                        StreamWriter sq = new StreamWriter(@"C:\Users\mth35\Desktop\test");
-                        foreach (int i in file_rx)
-                        {
-                            sq.Write(Convert.ToChar(i));
-                        }
-                        sq.Close();
-                        //-----------------
-                        //-----------------
-                        StreamWriter sa = new StreamWriter(@"C:\Users\mth35\Desktop\test01");
-                        foreach (int i in file_rx)
-                        {
-                            sa.Write(Convert.ToChar(i));
-                        }
-                        sa.Close();
-                        //-----------------
+                        ////-----------------
+                        //StreamWriter sq = new StreamWriter(@"C:\Users\mth35\Desktop\test.txt");
+                        //foreach (int i in file_rx)
+                        //{
+                        //    sq.Write(Convert.ToChar(i));
+                        //}
+                        //sq.Close();
+                        ////-----------------
+                        ////-----------------
+                        //StreamWriter sa = new StreamWriter(@"C:\Users\mth35\Desktop\test01.txt");
+                        //foreach (int i in rx_Lists)
+                        //{
+                        //    sa.Write(Convert.ToChar(i));
+                        //}
+                        //sa.Close();
+                        ////-----------------
                         rx_Lists.AddRange(file_rx);
                         rx_Lists.RemoveRange(Convert.ToInt32(file_length), rx_Lists.Count - Convert.ToInt32(file_length));
                         //-----------------
-                        StreamWriter sv = new StreamWriter(@"C:\Users\mth35\Desktop\test02");
+                        StreamWriter sv = new StreamWriter(@"C:\Users\mth35\Desktop\test02.txt");
                         foreach (int i in rx_Lists)
                         {
                             sv.Write(Convert.ToChar(i));
@@ -292,7 +292,7 @@ namespace RF_Module_N920S
                 textBox1.AppendText(Convert.ToString(rx_Lists.Count));
                 if (rx_Lists.Count > 14336)
                 {
-                    StreamWriter sw = new StreamWriter(@"C:\Users\mth35\Desktop\" + "re" + file_name);
+                    StreamWriter sw = new StreamWriter(@"C:\Users\mth35\Desktop\" + "re" + file_name + ".txt");
                     foreach(int i in rx_Lists)
                     {
                         sw.Write(Convert.ToChar(i));
