@@ -23,6 +23,7 @@ namespace RF_Module_N920S
         //---接收變數---
         string rx = "";
         byte[] file_rx = new byte[2048];
+        int num = 500; //超出時間的等待次數
         string file_name, file_length, file_time;
 
         List<byte> rx_Lists = new List<byte>();
@@ -220,11 +221,11 @@ namespace RF_Module_N920S
                 }else if(read_mode== "start_receiving")
                 {
                     readingFromBuffer = "keep";
-                    while (serialPort1.BytesToRead < file_rx.Length && count < 100 && readingFromBuffer != "final")  //加上資料大小判斷file_length
+                    while (serialPort1.BytesToRead < file_rx.Length && count < num && readingFromBuffer != "final")  //加上資料大小判斷file_length
                     {
                         Thread.Sleep(100);
                         count++;
-                        if (count > 100)
+                        if (count > num)
                         {
                             readingFromBuffer = "exceed_time";
                         }else if(rx_Lists.Count >= file_length_int)
