@@ -34,7 +34,7 @@
             this.Connect_btu = new System.Windows.Forms.Button();
             this.Control = new System.Windows.Forms.GroupBox();
             this.file_control = new System.Windows.Forms.GroupBox();
-            this.Send = new System.Windows.Forms.Button();
+            this.Send_btu = new System.Windows.Forms.Button();
             this.Load_file = new System.Windows.Forms.Button();
             this.Clear_btu = new System.Windows.Forms.Button();
             this.Configurtion_btu = new System.Windows.Forms.Button();
@@ -107,7 +107,7 @@
             // 
             // file_control
             // 
-            this.file_control.Controls.Add(this.Send);
+            this.file_control.Controls.Add(this.Send_btu);
             this.file_control.Controls.Add(this.Load_file);
             this.file_control.Location = new System.Drawing.Point(8, 293);
             this.file_control.Name = "file_control";
@@ -116,15 +116,15 @@
             this.file_control.TabStop = false;
             this.file_control.Text = "file_control";
             // 
-            // Send
+            // Send_btu
             // 
-            this.Send.Location = new System.Drawing.Point(172, 99);
-            this.Send.Name = "Send";
-            this.Send.Size = new System.Drawing.Size(160, 40);
-            this.Send.TabIndex = 12;
-            this.Send.Text = "Send";
-            this.Send.UseVisualStyleBackColor = true;
-            this.Send.Click += new System.EventHandler(this.Send_Click);
+            this.Send_btu.Location = new System.Drawing.Point(172, 99);
+            this.Send_btu.Name = "Send_btu";
+            this.Send_btu.Size = new System.Drawing.Size(160, 40);
+            this.Send_btu.TabIndex = 12;
+            this.Send_btu.Text = "Send";
+            this.Send_btu.UseVisualStyleBackColor = true;
+            this.Send_btu.Click += new System.EventHandler(this.Send_Click);
             // 
             // Load_file
             // 
@@ -304,6 +304,7 @@
             // 
             // bgWorker_Writerestatus
             // 
+            this.bgWorker_Writerestatus.WorkerSupportsCancellation = true;
             this.bgWorker_Writerestatus.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork_1);
             this.bgWorker_Writerestatus.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_Writerestatus_RunWorkerCompleted);
             // 
@@ -357,7 +358,7 @@
         private System.Windows.Forms.Button Clear_btu;
         private System.Windows.Forms.GroupBox file_control;
         private System.Windows.Forms.Button Load_file;
-        private System.Windows.Forms.Button Send;
+        private System.Windows.Forms.Button Send_btu;
         private System.ComponentModel.BackgroundWorker bgWorker_Writetomofile;
         private System.ComponentModel.BackgroundWorker bgWorker_Writerestatus;
     }

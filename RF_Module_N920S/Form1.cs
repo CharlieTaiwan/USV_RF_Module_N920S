@@ -17,16 +17,20 @@ namespace RF_Module_N920S
     {
         //---傳送變數---
         string tx = "";
-        byte[] file_tx;
+        byte[] file_bytes;
         string Read_All, Read_Name, Read_file_Length;
         
         //---接收變數---
         string rx = "";
-        byte[] file_rx = new Byte[1024];
+        byte[] file_rx = new byte[2048];
         string file_name;
         string file_length;
 
         List<byte> rx_Lists = new List<byte>();
+
+        //----路徑變數---
+        string load_file_path = @"C:\Users\mth35\Desktop\045915.dat";
+        string creat_file_path = @"C:\Users\mth35\Desktop\";
 
         public Form1()
         {
@@ -50,7 +54,8 @@ namespace RF_Module_N920S
             BaudRate.SelectedIndex = 0;
 
             Disconnect_btu.Enabled = false;
-
+            Load_file.Enabled = false;
+            Send_btu.Enabled = false;
             Command_btu.Enabled = false;
             Data_btu.Enabled = false;
             Configurtion_btu.Enabled = false;
@@ -121,7 +126,8 @@ namespace RF_Module_N920S
             Command_btu.Enabled = true;
             Data_btu.Enabled = false;
             Configurtion_btu.Enabled = false;
-
+            Load_file.Enabled = true;
+            Send_btu.Enabled = false;
             Connect_btu.Enabled = false;
             Disconnect_btu.Enabled = true;
         }
@@ -132,19 +138,23 @@ namespace RF_Module_N920S
             {
                 bgWorker_Read.CancelAsync();
                 bgWorker_Write.CancelAsync();
-
+                bgWorker_Writerestatus.CancelAsync();
+                bgWorker_Writetomofile.CancelAsync();
                 serialPort1.Close();
             }
             else
             {
                 bgWorker_Read.CancelAsync();
                 bgWorker_Write.CancelAsync();
+                bgWorker_Writerestatus.CancelAsync();
+                bgWorker_Writetomofile.CancelAsync();
             }
 
             Command_btu.Enabled = false;
             Data_btu.Enabled = false;
             Configurtion_btu.Enabled = false;
-
+            Load_file.Enabled = false;
+            Send_btu.Enabled = false;
             Connect_btu.Enabled = true;
             Disconnect_btu.Enabled = false;
         }
@@ -168,7 +178,7 @@ namespace RF_Module_N920S
                     {
                         if (serialPort1.BytesToRead != 0)
                         {
-                            Thread.Sleep(100);      //刪掉試試看
+                            Thread.Sleep(100);      
                             rx = serialPort1.ReadExisting();
 
                             check_code_array = rx.Split(Convert.ToChar(";"));
@@ -219,56 +229,53 @@ namespace RF_Module_N920S
                             readingFromBuffer = "exceed_time";
                         }else if(rx_Lists.Count >= file_length_int)
                         {
+                            while (serialPort1.BytesToRead < Convert.ToInt32(file_length)-file_length_int)
+                            {
+                                Thread.Sleep(100);
+                                if(serialPort1.BytesToRead >= Convert.ToInt32(file_length) - file_length_int)
+                                {
+                                    break;
+                                }
+                            }
+                            
                             readingFromBuffer = "final";
                         }
                     }
                     count = 0;
                     if (readingFromBuffer == "keep")
                     {
-                        //rx = serialPort1.ReadExisting();   //ReadExisting 在讀取二進位資料流轉換上用的byte數不一樣
-                        serialPort1.Read(file_rx, 0, file_rx.Length);  //一個一個byte讀取
-                        rx_Lists.AddRange(file_rx);
-                        bgWorker_Read.ReportProgress(0);
+                        if (serialPort1.BytesToRead != 0)
+                        {
+                            //rx = serialPort1.ReadExisting();   //ReadExisting 在讀取二進位資料流轉換上用的byte數不一樣
+                            serialPort1.Read(file_rx, 0, file_rx.Length);  //一個一個byte讀取
+                            rx_Lists.AddRange(file_rx);
+                            bgWorker_Read.ReportProgress(0);
+                        }
                     }
                     else if(readingFromBuffer == "exceed_time")
                     {
-                        //rx = serialPort1.ReadExisting();   //ReadExisting 在讀取二進位資料流轉換上用的byte數不一樣
-                        serialPort1.Read(file_rx, 0, file_rx.Length);  //一個一個byte讀取
-                        rx_Lists.AddRange(file_rx);
-                        bgWorker_Read.ReportProgress(0);
+                        if (serialPort1.BytesToRead != 0)
+                        {
+                            //rx = serialPort1.ReadExisting();   //ReadExisting 在讀取二進位資料流轉換上用的byte數不一樣
+                            serialPort1.Read(file_rx, 0, file_rx.Length);  //一個一個byte讀取
+                            rx_Lists.AddRange(file_rx);
+                            bgWorker_Read.ReportProgress(0);
+                        }
                     }
                     else if(readingFromBuffer == "final")
                     {
-                        MessageBox.Show(Convert.ToString(rx_Lists[14335]));
-                        serialPort1.Read(file_rx, 0, file_rx.Length);
-                        ////-----------------
-                        //StreamWriter sq = new StreamWriter(@"C:\Users\mth35\Desktop\test.txt");
-                        //foreach (int i in file_rx)
-                        //{
-                        //    sq.Write(Convert.ToChar(i));
-                        //}
-                        //sq.Close();
-                        ////-----------------
-                        ////-----------------
-                        //StreamWriter sa = new StreamWriter(@"C:\Users\mth35\Desktop\test01.txt");
-                        //foreach (int i in rx_Lists)
-                        //{
-                        //    sa.Write(Convert.ToChar(i));
-                        //}
-                        //sa.Close();
-                        ////-----------------
-                        rx_Lists.AddRange(file_rx);
-                        rx_Lists.RemoveRange(Convert.ToInt32(file_length), rx_Lists.Count - Convert.ToInt32(file_length));
-                        //-----------------
-                        StreamWriter sv = new StreamWriter(@"C:\Users\mth35\Desktop\test02.txt");
-                        foreach (int i in rx_Lists)
+                        if (serialPort1.BytesToRead != 0)
                         {
-                            sv.Write(Convert.ToChar(i));
+                            int a = serialPort1.Read(file_rx, 0, file_rx.Length);
+
+                            MessageBox.Show(Convert.ToString(a)+" "+ Convert.ToString(file_rx.Length));
+                            rx_Lists.AddRange(file_rx);
+                            rx_Lists.RemoveRange(Convert.ToInt32(file_length), rx_Lists.Count - Convert.ToInt32(file_length));
+
+                            MessageBox.Show(Convert.ToString(rx_Lists[0]) + " " + Convert.ToString(rx_Lists[rx_Lists.Count - 1]));
+                            bgWorker_Read.ReportProgress(0);
+                            read_mode = "empty";
                         }
-                        sv.Close();
-                        //-----------------
-                        bgWorker_Read.ReportProgress(0);
-                        read_mode = "empty";
                     }
 
                     Thread.Sleep(100);
@@ -277,6 +284,8 @@ namespace RF_Module_N920S
                 {
                     //TODO
                 }
+
+                Thread.Sleep(100);
             }
         }
 
@@ -290,16 +299,18 @@ namespace RF_Module_N920S
             {
                 //rx_Lists.AddRange(file_rx);
                 textBox1.AppendText(Convert.ToString(rx_Lists.Count));
-                if (rx_Lists.Count > 14336)
+               
+                if(rx_Lists.Count == Convert.ToInt32(file_length))
                 {
-                    StreamWriter sw = new StreamWriter(@"C:\Users\mth35\Desktop\" + "re" + file_name + ".txt");
-                    foreach(int i in rx_Lists)
+                    StreamWriter sw = new StreamWriter(creat_file_path + "re" + file_name + ".txt");
+                    foreach (int i in rx_Lists)
                     {
-                        sw.Write(Convert.ToChar(i));
+                        sw.Write(Convert.ToString(i) + " ");
                     }
                     sw.Close();
-                }
 
+                    Send_btu.Enabled = true;
+                }
             }
         }
 
@@ -307,6 +318,8 @@ namespace RF_Module_N920S
         {
             
         }
+        //-----------------------------------------------------------------------------------
+
         //---------------------------write---------------------------------------------------
         private void bgWorker_write_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -334,7 +347,9 @@ namespace RF_Module_N920S
         {
 
         }
-        //--------------------------------------三個按鈕--------------------------------------------
+        //------------------------------------------------------------------------------------------
+
+        //--------------------------------------五個按鈕--------------------------------------------
         private void Command_btu_Click(object sender, EventArgs e)
         {
             textBox2.Text = "+++";
@@ -370,19 +385,28 @@ namespace RF_Module_N920S
         {
             if (serialPort1.IsOpen)
             {
+                Load_file.Enabled = false;
+                Send_btu.Enabled = false;
+
                 string file_info = Read_file_Length + ";" +  Read_Name;
                 tx = "tomofile" + ";" + file_info;
                 serialPort1.Write(tx);
             }
         }
 
+        private void Clear_btu_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear();
+        }
+        //-------------------------------------------------------------------------------------
+
         private void bgWorker_Writetomofile_DoWork(object sender, DoWorkEventArgs e)
         {
             if (serialPort1.IsOpen)
             {
-                tx = Read_All;
-                serialPort1.Write(tx);
-                //serialPort1.Write(file_tx, 0, file_tx.Length);
+                //tx = Read_All;
+                //serialPort1.Write(tx);
+                serialPort1.Write(file_bytes, 0, file_bytes.Length);
             }
         }
 
@@ -405,31 +429,29 @@ namespace RF_Module_N920S
             bgWorker_Writerestatus.Dispose();
         }
 
+        //------------------------------讀取文件------------------------------------
         private void Load_file_Click(object sender, EventArgs e)
         {
-            string file_path;
-            file_path = @"C:\Users\mth35\Desktop\ABC.txt";
-            //file_path = @"C:\Users\mth35\Desktop\045915.dat";
-            
+            Load_file.Enabled = false;
+            Send_btu.Enabled = true;
+
             //-----以字串方式讀取-----
-            StreamReader str = new StreamReader(file_path);
-            Read_All = str.ReadToEnd();
-            Read_file_Length = Convert.ToString(Read_All.Length);
-            Read_Name = Path.GetFileName(file_path);
-            str.Close();
+            //StreamReader str = new StreamReader(file_path);
+            //Read_All = str.ReadToEnd();
+            //Read_file_Length = Convert.ToString(Read_All.Length);
+            //Read_Name = Path.GetFileName(file_path);
+            //str.Close();
 
             //-----讀取二進制文件，可以控制要傳出幾個byte-----
-            //FileStream str = new FileStream(file_path, FileMode.Open, FileAccess.Read);
-            //num = Convert.ToInt32(str.Length);
-            //BinaryReader binaryReader = new BinaryReader(str);
-            //file_bytes = binaryReader.ReadBytes(num);
-            //binaryReader.Dispose();
-            //str.Dispose();
-        }
+            FileStream str = new FileStream(load_file_path, FileMode.Open, FileAccess.Read);
+            
+            BinaryReader binaryReader = new BinaryReader(str);
+            file_bytes = binaryReader.ReadBytes(Convert.ToInt32(str.Length));
+            binaryReader.Dispose();
+            str.Dispose();
 
-        private void Clear_btu_Click(object sender, EventArgs e)
-        {
-            textBox1.Clear();
+            Read_Name = Path.GetFileName(load_file_path);
+            Read_file_Length = Convert.ToString(file_bytes.Length);
         }
     }
 }
