@@ -18,18 +18,17 @@ namespace RF_Module_N920S
         //---傳送變數---
         string tx = "";
         byte[] file_bytes;
-        string Read_All, Read_Name, Read_file_Length;
+        string Read_All, Read_Name, Read_file_Length, Time_show;
         
         //---接收變數---
         string rx = "";
         byte[] file_rx = new byte[2048];
-        string file_name;
-        string file_length;
+        string file_name, file_length, file_time;
 
         List<byte> rx_Lists = new List<byte>();
 
         //----路徑變數---
-        string load_file_path = @"C:\Users\mth35\Desktop\045915.dat";
+        string load_file_path = @"C:\Users\mth35\Desktop\ABC.txt";
         string creat_file_path = @"C:\Users\mth35\Desktop\";
 
         public Form1()
@@ -183,11 +182,12 @@ namespace RF_Module_N920S
 
                             check_code_array = rx.Split(Convert.ToChar(";"));
 
-                            if(check_code_array.Length == 3 && check_code_array[0] == "tomofile")
+                            if(check_code_array.Length == 4 && check_code_array[0] == "tomofile")
                             {
                                 check_code = check_code_array[0];
                                 file_length = check_code_array[1];
                                 file_name = check_code_array[2];
+                                file_time = check_code_array[3];
 
                                 file_length_int = (Convert.ToInt32(Convert.ToInt32(file_length) / file_rx.Length)) * file_rx.Length;
 
@@ -229,8 +229,10 @@ namespace RF_Module_N920S
                             readingFromBuffer = "exceed_time";
                         }else if(rx_Lists.Count >= file_length_int)
                         {
+                            
                             while (serialPort1.BytesToRead < Convert.ToInt32(file_length)-file_length_int)
                             {
+                                //MessageBox.Show("1");
                                 Thread.Sleep(100);
                                 if(serialPort1.BytesToRead >= Convert.ToInt32(file_length) - file_length_int)
                                 {
@@ -268,11 +270,9 @@ namespace RF_Module_N920S
                         {
                             int a = serialPort1.Read(file_rx, 0, file_rx.Length);
 
-                            MessageBox.Show(Convert.ToString(a)+" "+ Convert.ToString(file_rx.Length));
                             rx_Lists.AddRange(file_rx);
                             rx_Lists.RemoveRange(Convert.ToInt32(file_length), rx_Lists.Count - Convert.ToInt32(file_length));
 
-                            MessageBox.Show(Convert.ToString(rx_Lists[0]) + " " + Convert.ToString(rx_Lists[rx_Lists.Count - 1]));
                             bgWorker_Read.ReportProgress(0);
                             read_mode = "empty";
                         }
@@ -299,17 +299,29 @@ namespace RF_Module_N920S
             {
                 //rx_Lists.AddRange(file_rx);
                 textBox1.AppendText(Convert.ToString(rx_Lists.Count));
-               
-                if(rx_Lists.Count == Convert.ToInt32(file_length))
-                {
-                    StreamWriter sw = new StreamWriter(creat_file_path + "re" + file_name + ".txt");
-                    foreach (int i in rx_Lists)
-                    {
-                        sw.Write(Convert.ToString(i) + " ");
-                    }
-                    sw.Close();
 
-                    Send_btu.Enabled = true;
+                if (rx_Lists.Count == Convert.ToInt32(file_length))
+                {
+                    DateTime f_time = new DateTime();
+
+                    f_time = DateTime.Now;
+
+                    int F_time_Min = f_time.Minute;
+                    int F_time_Sec = f_time.Second;
+
+                    string ReTime_show = Convert.ToString((F_time_Min * 60 + F_time_Sec) - Convert.ToInt32(file_time));
+                    MessageBox.Show(ReTime_show + "(s)");
+
+                    //StreamWriter sw = new StreamWriter(creat_file_path + "re" + file_name + ".txt");
+                    //foreach (int i in rx_Lists)
+                    //{
+                    //    sw.Write(Convert.ToString(i) + " ");
+                    //}
+                    //sw.Close();
+
+                    FileStream fs = new FileStream(creat_file_path + "re" + file_name, FileMode.OpenOrCreate, FileAccess.Write);
+                    fs.Write(rx_Lists.ToArray(), 0, rx_Lists.Count);
+                    fs.Dispose();
                 }
             }
         }
@@ -388,7 +400,16 @@ namespace RF_Module_N920S
                 Load_file.Enabled = false;
                 Send_btu.Enabled = false;
 
-                string file_info = Read_file_Length + ";" +  Read_Name;
+                DateTime c_time = new DateTime();
+
+                c_time = DateTime.Now;
+
+                int C_time_Min = c_time.Minute;
+                int C_time_Sec = c_time.Second;
+
+                Time_show = Convert.ToString(C_time_Min * 60 + C_time_Sec);
+
+                string file_info = Read_file_Length + ";" +  Read_Name + ";" + Time_show;
                 tx = "tomofile" + ";" + file_info;
                 serialPort1.Write(tx);
             }
@@ -398,6 +419,9 @@ namespace RF_Module_N920S
         {
             textBox1.Clear();
         }
+
+        
+
         //-------------------------------------------------------------------------------------
 
         private void bgWorker_Writetomofile_DoWork(object sender, DoWorkEventArgs e)
@@ -407,7 +431,13 @@ namespace RF_Module_N920S
                 //tx = Read_All;
                 //serialPort1.Write(tx);
                 serialPort1.Write(file_bytes, 0, file_bytes.Length);
+                bgWorker_Writetomofile.ReportProgress(0);
             }
+        }
+
+        private void bgWorker_Writetomofile_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            Load_file.Enabled = true;
         }
 
         private void bgWorker_Writetomofile_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -434,7 +464,7 @@ namespace RF_Module_N920S
         {
             Load_file.Enabled = false;
             Send_btu.Enabled = true;
-
+            
             //-----以字串方式讀取-----
             //StreamReader str = new StreamReader(file_path);
             //Read_All = str.ReadToEnd();

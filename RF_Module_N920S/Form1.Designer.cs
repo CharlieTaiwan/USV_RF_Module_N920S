@@ -109,16 +109,16 @@
             // 
             this.file_control.Controls.Add(this.Send_btu);
             this.file_control.Controls.Add(this.Load_file);
-            this.file_control.Location = new System.Drawing.Point(8, 293);
+            this.file_control.Location = new System.Drawing.Point(8, 366);
             this.file_control.Name = "file_control";
-            this.file_control.Size = new System.Drawing.Size(341, 145);
+            this.file_control.Size = new System.Drawing.Size(341, 72);
             this.file_control.TabIndex = 10;
             this.file_control.TabStop = false;
             this.file_control.Text = "file_control";
             // 
             // Send_btu
             // 
-            this.Send_btu.Location = new System.Drawing.Point(172, 99);
+            this.Send_btu.Location = new System.Drawing.Point(172, 21);
             this.Send_btu.Name = "Send_btu";
             this.Send_btu.Size = new System.Drawing.Size(160, 40);
             this.Send_btu.TabIndex = 12;
@@ -298,8 +298,10 @@
             // 
             // bgWorker_Writetomofile
             // 
+            this.bgWorker_Writetomofile.WorkerReportsProgress = true;
             this.bgWorker_Writetomofile.WorkerSupportsCancellation = true;
             this.bgWorker_Writetomofile.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_Writetomofile_DoWork);
+            this.bgWorker_Writetomofile.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgWorker_Writetomofile_ProgressChanged);
             this.bgWorker_Writetomofile.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_Writetomofile_RunWorkerCompleted);
             // 
             // bgWorker_Writerestatus
