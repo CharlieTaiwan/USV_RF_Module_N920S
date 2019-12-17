@@ -55,6 +55,10 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.bgWorker_Writetomofile = new System.ComponentModel.BackgroundWorker();
             this.bgWorker_Writerestatus = new System.ComponentModel.BackgroundWorker();
+            this.Load_Path = new System.Windows.Forms.Label();
+            this.Save_Path = new System.Windows.Forms.Label();
+            this.tb_Load_Path = new System.Windows.Forms.TextBox();
+            this.tb_Save_Path = new System.Windows.Forms.TextBox();
             this.Control.SuspendLayout();
             this.file_control.SuspendLayout();
             this.Connect.SuspendLayout();
@@ -91,6 +95,10 @@
             // 
             // Control
             // 
+            this.Control.Controls.Add(this.tb_Save_Path);
+            this.Control.Controls.Add(this.tb_Load_Path);
+            this.Control.Controls.Add(this.Save_Path);
+            this.Control.Controls.Add(this.Load_Path);
             this.Control.Controls.Add(this.file_control);
             this.Control.Controls.Add(this.Clear_btu);
             this.Control.Controls.Add(this.Configurtion_btu);
@@ -251,10 +259,7 @@
             // 
             this.BaudRate.FormattingEnabled = true;
             this.BaudRate.Items.AddRange(new object[] {
-            "9600",
-            "14400",
-            "19200",
-            "28800"});
+            "19200"});
             this.BaudRate.Location = new System.Drawing.Point(113, 53);
             this.BaudRate.Name = "BaudRate";
             this.BaudRate.Size = new System.Drawing.Size(184, 20);
@@ -310,6 +315,38 @@
             this.bgWorker_Writerestatus.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork_1);
             this.bgWorker_Writerestatus.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_Writerestatus_RunWorkerCompleted);
             // 
+            // Load_Path
+            // 
+            this.Load_Path.AutoSize = true;
+            this.Load_Path.Location = new System.Drawing.Point(12, 317);
+            this.Load_Path.Name = "Load_Path";
+            this.Load_Path.Size = new System.Drawing.Size(52, 12);
+            this.Load_Path.TabIndex = 11;
+            this.Load_Path.Text = "Load Path";
+            // 
+            // Save_Path
+            // 
+            this.Save_Path.AutoSize = true;
+            this.Save_Path.Location = new System.Drawing.Point(12, 343);
+            this.Save_Path.Name = "Save_Path";
+            this.Save_Path.Size = new System.Drawing.Size(50, 12);
+            this.Save_Path.TabIndex = 13;
+            this.Save_Path.Text = "Save Path";
+            // 
+            // tb_Load_Path
+            // 
+            this.tb_Load_Path.Location = new System.Drawing.Point(74, 314);
+            this.tb_Load_Path.Name = "tb_Load_Path";
+            this.tb_Load_Path.Size = new System.Drawing.Size(266, 22);
+            this.tb_Load_Path.TabIndex = 1;
+            // 
+            // tb_Save_Path
+            // 
+            this.tb_Save_Path.Location = new System.Drawing.Point(74, 340);
+            this.tb_Save_Path.Name = "tb_Save_Path";
+            this.tb_Save_Path.Size = new System.Drawing.Size(266, 22);
+            this.tb_Save_Path.TabIndex = 14;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -324,6 +361,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Control.ResumeLayout(false);
+            this.Control.PerformLayout();
             this.file_control.ResumeLayout(false);
             this.Connect.ResumeLayout(false);
             this.Connect.PerformLayout();
@@ -363,6 +401,10 @@
         private System.Windows.Forms.Button Send_btu;
         private System.ComponentModel.BackgroundWorker bgWorker_Writetomofile;
         private System.ComponentModel.BackgroundWorker bgWorker_Writerestatus;
+        private System.Windows.Forms.Label Save_Path;
+        private System.Windows.Forms.Label Load_Path;
+        private System.Windows.Forms.TextBox tb_Load_Path;
+        private System.Windows.Forms.TextBox tb_Save_Path;
     }
 }
 

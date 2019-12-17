@@ -11,6 +11,7 @@ using System.IO.Ports;
 using System.Threading;
 using System.IO;
 
+
 namespace RF_Module_N920S
 {
     public partial class Form1 : Form
@@ -30,7 +31,7 @@ namespace RF_Module_N920S
 
         //----路徑變數---
         string load_file_path = @"C:\Users\mth35\Desktop\ABC.txt";
-        string creat_file_path = @"C:\Users\mth35\Desktop\";
+        string creat_file_path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
         public Form1()
         {
@@ -39,6 +40,9 @@ namespace RF_Module_N920S
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            tb_Load_Path.Text = load_file_path;
+            tb_Save_Path.Text = creat_file_path + @"\";
+
             ComPort.Items.AddRange(SerialPort.GetPortNames());
 
             if (ComPort.Items.Count > 0)
@@ -313,14 +317,14 @@ namespace RF_Module_N920S
                     string ReTime_show = Convert.ToString((F_time_Min * 60 + F_time_Sec) - Convert.ToInt32(file_time));
                     MessageBox.Show(ReTime_show + "(s)");
 
-                    //StreamWriter sw = new StreamWriter(creat_file_path + "re" + file_name + ".txt");
+                    //StreamWriter sw = new StreamWriter(tb_Save_Path.Text + "re" + file_name + ".txt");
                     //foreach (int i in rx_Lists)
                     //{
                     //    sw.Write(Convert.ToString(i) + " ");
                     //}
                     //sw.Close();
 
-                    FileStream fs = new FileStream(creat_file_path + "re" + file_name, FileMode.OpenOrCreate, FileAccess.Write);
+                    FileStream fs = new FileStream(tb_Save_Path.Text + "re" + file_name, FileMode.OpenOrCreate, FileAccess.Write);
                     fs.Write(rx_Lists.ToArray(), 0, rx_Lists.Count);
                     fs.Dispose();
                 }
@@ -388,10 +392,17 @@ namespace RF_Module_N920S
 
         private void RE_btu_Click(object sender, EventArgs e)
         {
-            ComPort.Items.Clear();
-            ComPort.Items.AddRange(SerialPort.GetPortNames());
-            ComPort.SelectedIndex = 0;
-            Connect_btu.Enabled = true;
+            if(ComPort.Items.Count == 0)
+            {
+                ComPort.Items.Clear();
+            }
+            else
+            {
+                ComPort.Items.Clear();
+                ComPort.Items.AddRange(SerialPort.GetPortNames());
+                ComPort.SelectedIndex = 0;
+                Connect_btu.Enabled = true;
+            }
         }
 
         private void Send_Click(object sender, EventArgs e)
@@ -474,14 +485,14 @@ namespace RF_Module_N920S
             //str.Close();
 
             //-----讀取二進制文件，可以控制要傳出幾個byte-----
-            FileStream str = new FileStream(load_file_path, FileMode.Open, FileAccess.Read);
+            FileStream str = new FileStream(tb_Load_Path.Text, FileMode.Open, FileAccess.Read);
             
             BinaryReader binaryReader = new BinaryReader(str);
             file_bytes = binaryReader.ReadBytes(Convert.ToInt32(str.Length));
             binaryReader.Dispose();
             str.Dispose();
 
-            Read_Name = Path.GetFileName(load_file_path);
+            Read_Name = Path.GetFileName(tb_Load_Path.Text);
             Read_file_Length = Convert.ToString(file_bytes.Length);
         }
     }
