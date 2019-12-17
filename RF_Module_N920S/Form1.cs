@@ -30,7 +30,7 @@ namespace RF_Module_N920S
         List<byte> rx_Lists = new List<byte>();
 
         //----路徑變數---
-        string load_file_path = @"C:\Users\mth35\Desktop\ABC.txt";
+        string load_file_path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\ABC.txt";
         string creat_file_path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
         public Form1()
