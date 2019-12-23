@@ -33,9 +33,14 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.Connect_btu = new System.Windows.Forms.Button();
             this.Control = new System.Windows.Forms.GroupBox();
+            this.tb_Save_Path = new System.Windows.Forms.TextBox();
+            this.tb_Load_Path = new System.Windows.Forms.TextBox();
+            this.Save_Path = new System.Windows.Forms.Label();
+            this.Load_Path = new System.Windows.Forms.Label();
             this.file_control = new System.Windows.Forms.GroupBox();
-            this.Send_btu = new System.Windows.Forms.Button();
+            this.StopCheck_btu = new System.Windows.Forms.Button();
             this.Load_file = new System.Windows.Forms.Button();
+            this.Autocheck_btu = new System.Windows.Forms.Button();
             this.Clear_btu = new System.Windows.Forms.Button();
             this.Configurtion_btu = new System.Windows.Forms.Button();
             this.Data_btu = new System.Windows.Forms.Button();
@@ -55,10 +60,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.bgWorker_Writetomofile = new System.ComponentModel.BackgroundWorker();
             this.bgWorker_Writerestatus = new System.ComponentModel.BackgroundWorker();
-            this.Load_Path = new System.Windows.Forms.Label();
-            this.Save_Path = new System.Windows.Forms.Label();
-            this.tb_Load_Path = new System.Windows.Forms.TextBox();
-            this.tb_Save_Path = new System.Windows.Forms.TextBox();
+            this.bgWorker_filedetect = new System.ComponentModel.BackgroundWorker();
             this.Control.SuspendLayout();
             this.file_control.SuspendLayout();
             this.Connect.SuspendLayout();
@@ -113,36 +115,81 @@
             this.Control.TabStop = false;
             this.Control.Text = "Control";
             // 
+            // tb_Save_Path
+            // 
+            this.tb_Save_Path.Location = new System.Drawing.Point(74, 286);
+            this.tb_Save_Path.Name = "tb_Save_Path";
+            this.tb_Save_Path.Size = new System.Drawing.Size(266, 22);
+            this.tb_Save_Path.TabIndex = 14;
+            // 
+            // tb_Load_Path
+            // 
+            this.tb_Load_Path.Location = new System.Drawing.Point(74, 260);
+            this.tb_Load_Path.Name = "tb_Load_Path";
+            this.tb_Load_Path.Size = new System.Drawing.Size(266, 22);
+            this.tb_Load_Path.TabIndex = 1;
+            // 
+            // Save_Path
+            // 
+            this.Save_Path.AutoSize = true;
+            this.Save_Path.Location = new System.Drawing.Point(12, 289);
+            this.Save_Path.Name = "Save_Path";
+            this.Save_Path.Size = new System.Drawing.Size(50, 12);
+            this.Save_Path.TabIndex = 13;
+            this.Save_Path.Text = "Save Path";
+            // 
+            // Load_Path
+            // 
+            this.Load_Path.AutoSize = true;
+            this.Load_Path.Location = new System.Drawing.Point(12, 263);
+            this.Load_Path.Name = "Load_Path";
+            this.Load_Path.Size = new System.Drawing.Size(52, 12);
+            this.Load_Path.TabIndex = 11;
+            this.Load_Path.Text = "Load Path";
+            // 
             // file_control
             // 
-            this.file_control.Controls.Add(this.Send_btu);
+            this.file_control.Controls.Add(this.StopCheck_btu);
             this.file_control.Controls.Add(this.Load_file);
-            this.file_control.Location = new System.Drawing.Point(8, 366);
+            this.file_control.Controls.Add(this.Autocheck_btu);
+            this.file_control.Location = new System.Drawing.Point(8, 326);
             this.file_control.Name = "file_control";
-            this.file_control.Size = new System.Drawing.Size(341, 72);
+            this.file_control.Size = new System.Drawing.Size(341, 112);
             this.file_control.TabIndex = 10;
             this.file_control.TabStop = false;
             this.file_control.Text = "file_control";
             // 
-            // Send_btu
+            // StopCheck_btu
             // 
-            this.Send_btu.Location = new System.Drawing.Point(172, 21);
-            this.Send_btu.Name = "Send_btu";
-            this.Send_btu.Size = new System.Drawing.Size(160, 40);
-            this.Send_btu.TabIndex = 12;
-            this.Send_btu.Text = "Send";
-            this.Send_btu.UseVisualStyleBackColor = true;
-            this.Send_btu.Click += new System.EventHandler(this.Send_Click);
+            this.StopCheck_btu.BackColor = System.Drawing.SystemColors.Control;
+            this.StopCheck_btu.Location = new System.Drawing.Point(172, 21);
+            this.StopCheck_btu.Name = "StopCheck_btu";
+            this.StopCheck_btu.Size = new System.Drawing.Size(160, 40);
+            this.StopCheck_btu.TabIndex = 16;
+            this.StopCheck_btu.Text = "Stopdetect";
+            this.StopCheck_btu.UseVisualStyleBackColor = false;
+            this.StopCheck_btu.Click += new System.EventHandler(this.StopCheck_btu_Click_1);
             // 
             // Load_file
             // 
-            this.Load_file.Location = new System.Drawing.Point(6, 21);
+            this.Load_file.Location = new System.Drawing.Point(6, 66);
             this.Load_file.Name = "Load_file";
-            this.Load_file.Size = new System.Drawing.Size(160, 40);
+            this.Load_file.Size = new System.Drawing.Size(326, 40);
             this.Load_file.TabIndex = 11;
-            this.Load_file.Text = "Load_file";
+            this.Load_file.Text = "Load_and_Send";
             this.Load_file.UseVisualStyleBackColor = true;
             this.Load_file.Click += new System.EventHandler(this.Load_file_Click);
+            // 
+            // Autocheck_btu
+            // 
+            this.Autocheck_btu.BackColor = System.Drawing.SystemColors.Control;
+            this.Autocheck_btu.Location = new System.Drawing.Point(6, 21);
+            this.Autocheck_btu.Name = "Autocheck_btu";
+            this.Autocheck_btu.Size = new System.Drawing.Size(160, 40);
+            this.Autocheck_btu.TabIndex = 15;
+            this.Autocheck_btu.Text = "Autodetect";
+            this.Autocheck_btu.UseVisualStyleBackColor = false;
+            this.Autocheck_btu.Click += new System.EventHandler(this.Autocheck_btu_Click);
             // 
             // Clear_btu
             // 
@@ -311,41 +358,18 @@
             // 
             // bgWorker_Writerestatus
             // 
+            this.bgWorker_Writerestatus.WorkerReportsProgress = true;
             this.bgWorker_Writerestatus.WorkerSupportsCancellation = true;
             this.bgWorker_Writerestatus.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork_1);
             this.bgWorker_Writerestatus.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_Writerestatus_RunWorkerCompleted);
             // 
-            // Load_Path
+            // bgWorker_filedetect
             // 
-            this.Load_Path.AutoSize = true;
-            this.Load_Path.Location = new System.Drawing.Point(12, 317);
-            this.Load_Path.Name = "Load_Path";
-            this.Load_Path.Size = new System.Drawing.Size(52, 12);
-            this.Load_Path.TabIndex = 11;
-            this.Load_Path.Text = "Load Path";
-            // 
-            // Save_Path
-            // 
-            this.Save_Path.AutoSize = true;
-            this.Save_Path.Location = new System.Drawing.Point(12, 343);
-            this.Save_Path.Name = "Save_Path";
-            this.Save_Path.Size = new System.Drawing.Size(50, 12);
-            this.Save_Path.TabIndex = 13;
-            this.Save_Path.Text = "Save Path";
-            // 
-            // tb_Load_Path
-            // 
-            this.tb_Load_Path.Location = new System.Drawing.Point(74, 314);
-            this.tb_Load_Path.Name = "tb_Load_Path";
-            this.tb_Load_Path.Size = new System.Drawing.Size(266, 22);
-            this.tb_Load_Path.TabIndex = 1;
-            // 
-            // tb_Save_Path
-            // 
-            this.tb_Save_Path.Location = new System.Drawing.Point(74, 340);
-            this.tb_Save_Path.Name = "tb_Save_Path";
-            this.tb_Save_Path.Size = new System.Drawing.Size(266, 22);
-            this.tb_Save_Path.TabIndex = 14;
+            this.bgWorker_filedetect.WorkerReportsProgress = true;
+            this.bgWorker_filedetect.WorkerSupportsCancellation = true;
+            this.bgWorker_filedetect.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_filedetect_DoWork);
+            this.bgWorker_filedetect.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgWorker_filedetect_ProgressChanged);
+            this.bgWorker_filedetect.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_filedetect_RunWorkerCompleted);
             // 
             // Form1
             // 
@@ -398,13 +422,15 @@
         private System.Windows.Forms.Button Clear_btu;
         private System.Windows.Forms.GroupBox file_control;
         private System.Windows.Forms.Button Load_file;
-        private System.Windows.Forms.Button Send_btu;
         private System.ComponentModel.BackgroundWorker bgWorker_Writetomofile;
         private System.ComponentModel.BackgroundWorker bgWorker_Writerestatus;
         private System.Windows.Forms.Label Save_Path;
         private System.Windows.Forms.Label Load_Path;
         private System.Windows.Forms.TextBox tb_Load_Path;
         private System.Windows.Forms.TextBox tb_Save_Path;
+        private System.Windows.Forms.Button Autocheck_btu;
+        private System.ComponentModel.BackgroundWorker bgWorker_filedetect;
+        private System.Windows.Forms.Button StopCheck_btu;
     }
 }
 

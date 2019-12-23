@@ -26,12 +26,17 @@ namespace RF_Module_N920S
         byte[] file_rx = new byte[2048];
         int num = 100; //超出時間的等待次數
         string file_name, file_length, file_time;
+        string DirectPath;
 
         List<byte> rx_Lists = new List<byte>();
 
+        List<string> Path_Lists = new List<string>();
+        int file_num = 0;
+        string autotx = "NOTOK";
+
         //----路徑變數---
-        string load_file_path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\ABC.txt";
-        string creat_file_path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        string load_file_path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\rftestfile";
+        string creat_file_path = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\rfrx";
 
         public Form1()
         {
@@ -45,6 +50,10 @@ namespace RF_Module_N920S
 
             ComPort.Items.AddRange(SerialPort.GetPortNames());
 
+            Path_Lists = Directory.GetFiles(load_file_path, "*.dat").ToList();
+            tb_Load_Path.Text = Path_Lists[0];
+
+
             if (ComPort.Items.Count > 0)
             {
                 ComPort.SelectedIndex = 0;
@@ -57,9 +66,9 @@ namespace RF_Module_N920S
 
             BaudRate.SelectedIndex = 0;
 
+            Autocheck_btu.Enabled = false;
             Disconnect_btu.Enabled = false;
             Load_file.Enabled = false;
-            Send_btu.Enabled = false;
             Command_btu.Enabled = false;
             Data_btu.Enabled = false;
             Configurtion_btu.Enabled = false;
@@ -69,7 +78,9 @@ namespace RF_Module_N920S
         {
             if (serialPort1.IsOpen)
             {
-                Environment.Exit(Environment.ExitCode);
+                Disconnect_btu.PerformClick();
+                
+                Application.Exit();
             }
         }
 
@@ -126,12 +137,11 @@ namespace RF_Module_N920S
                     bgWorker_Write.RunWorkerAsync();
                 }
             }
-
+            Autocheck_btu.Enabled = true;
             Command_btu.Enabled = true;
             Data_btu.Enabled = false;
             Configurtion_btu.Enabled = false;
             Load_file.Enabled = true;
-            Send_btu.Enabled = false;
             Connect_btu.Enabled = false;
             Disconnect_btu.Enabled = true;
         }
@@ -144,6 +154,7 @@ namespace RF_Module_N920S
                 bgWorker_Write.CancelAsync();
                 bgWorker_Writerestatus.CancelAsync();
                 bgWorker_Writetomofile.CancelAsync();
+                bgWorker_filedetect.CancelAsync();
                 serialPort1.Close();
             }
             else
@@ -152,13 +163,13 @@ namespace RF_Module_N920S
                 bgWorker_Write.CancelAsync();
                 bgWorker_Writerestatus.CancelAsync();
                 bgWorker_Writetomofile.CancelAsync();
+                bgWorker_filedetect.CancelAsync();
             }
 
             Command_btu.Enabled = false;
             Data_btu.Enabled = false;
             Configurtion_btu.Enabled = false;
             Load_file.Enabled = false;
-            Send_btu.Enabled = false;
             Connect_btu.Enabled = true;
             Disconnect_btu.Enabled = false;
         }
@@ -168,7 +179,7 @@ namespace RF_Module_N920S
             Int32 count = 0;
             string readingFromBuffer;
             string read_mode = "empty";
-            string check_code = "empty";
+            string check_code;
             string[] check_code_array;
             
             int file_length_int = 0;
@@ -201,6 +212,10 @@ namespace RF_Module_N920S
                             {
                                 check_code = check_code_array[0];
                             }
+                            else if (check_code_array.Length == 1 && check_code_array[0] == "complete")
+                            {
+                                check_code = check_code_array[0];
+                            }
                             else
                             {
                                 check_code = "empty";
@@ -219,6 +234,13 @@ namespace RF_Module_N920S
                             else if(check_code == "empty")
                             {
                                 bgWorker_Read.ReportProgress(1);
+                            }else if(check_code == "complete")
+                            {
+                                if(autotx == "OK")
+                                {
+                                    file_num += 1;
+                                    bgWorker_filedetect.RunWorkerAsync();
+                                }
                             }
                         }
                     }
@@ -313,9 +335,9 @@ namespace RF_Module_N920S
 
                     int F_time_Min = f_time.Minute;
                     int F_time_Sec = f_time.Second;
+                    int F_time_Millisec = f_time.Millisecond;
 
-                    string ReTime_show = Convert.ToString((F_time_Min * 60 + F_time_Sec) - Convert.ToInt32(file_time));
-                    MessageBox.Show(ReTime_show + "(s)");
+                    string ReTime_show = Convert.ToString(((F_time_Min * 60 + F_time_Sec)*1000+ F_time_Millisec) - Convert.ToInt32(file_time));
 
                     //StreamWriter sw = new StreamWriter(tb_Save_Path.Text + "re" + file_name + ".txt");
                     //foreach (int i in rx_Lists)
@@ -324,9 +346,16 @@ namespace RF_Module_N920S
                     //}
                     //sw.Close();
 
-                    FileStream fs = new FileStream(tb_Save_Path.Text + "re" + file_name, FileMode.OpenOrCreate, FileAccess.Write);
+                    FileStream fs = new FileStream(tb_Save_Path.Text + ReTime_show + "(ms)" + "_" + "re" + file_name, FileMode.OpenOrCreate, FileAccess.Write);
                     fs.Write(rx_Lists.ToArray(), 0, rx_Lists.Count);
                     fs.Dispose();
+
+                    Array.Clear(file_rx,0,file_rx.Length);
+                    rx_Lists.Clear();
+                    if (serialPort1.IsOpen)
+                    {
+                        serialPort1.Write("complete");
+                    }
                 }
             }
         }
@@ -340,19 +369,19 @@ namespace RF_Module_N920S
         //---------------------------write---------------------------------------------------
         private void bgWorker_write_DoWork(object sender, DoWorkEventArgs e)
         {
-            while (bgWorker_Write.CancellationPending != true)
-            {
-                if (serialPort1.IsOpen)
-                {
-                    if (textBox2.Text != "")
-                    {
-                        //Thread.Sleep(100);
-                        tx = textBox2.Text;
-                        serialPort1.Write(tx);
-                        bgWorker_Write.ReportProgress(0);
-                    }
-                }
-            }
+            //while (bgWorker_Write.CancellationPending != true)
+            //{
+            //    if (serialPort1.IsOpen)
+            //    {
+            //        if (textBox2.Text != "")
+            //        {
+            //            //Thread.Sleep(100);
+            //            tx = textBox2.Text;
+            //            serialPort1.Write(tx);
+            //            bgWorker_Write.ReportProgress(0);
+            //        }
+            //    }
+            //}
         }
 
         private void bgWorker_write_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -392,9 +421,10 @@ namespace RF_Module_N920S
 
         private void RE_btu_Click(object sender, EventArgs e)
         {
-            if(ComPort.Items.Count == 0)
+            if(SerialPort.GetPortNames().Length == 0)
             {
                 ComPort.Items.Clear();
+                ComPort.Text = "";
             }
             else
             {
@@ -405,37 +435,62 @@ namespace RF_Module_N920S
             }
         }
 
-        private void Send_Click(object sender, EventArgs e)
-        {
-            if (serialPort1.IsOpen)
-            {
-                Load_file.Enabled = false;
-                Send_btu.Enabled = false;
-
-                DateTime c_time = new DateTime();
-
-                c_time = DateTime.Now;
-
-                int C_time_Min = c_time.Minute;
-                int C_time_Sec = c_time.Second;
-
-                Time_show = Convert.ToString(C_time_Min * 60 + C_time_Sec);
-
-                string file_info = Read_file_Length + ";" +  Read_Name + ";" + Time_show;
-                tx = "tomofile" + ";" + file_info;
-                serialPort1.Write(tx);
-            }
-        }
 
         private void Clear_btu_Click(object sender, EventArgs e)
         {
             textBox1.Clear();
         }
-
-        
-
         //-------------------------------------------------------------------------------------
+        
+        //------------------------------------------------------------------------------
+        private void Autocheck_btu_Click(object sender, EventArgs e)
+        {
+            autotx = "OK";
+            Autocheck_btu.Enabled = false;
+            FileSystemWatcher fileSystemWatcher = new FileSystemWatcher(load_file_path, "*.dat");
+            fileSystemWatcher.EnableRaisingEvents = true;
+            fileSystemWatcher.Created += watch_Created;
+            
+        }
 
+        private void watch_Created(object sender, FileSystemEventArgs e)
+        {
+            DirectPath = e.FullPath;
+            Path_Lists.Add(DirectPath);
+        }
+
+        private void StopCheck_btu_Click_1(object sender, EventArgs e)
+        {
+            autotx = "NOTOK";
+            bgWorker_filedetect.CancelAsync();
+        }
+
+        private void bgWorker_filedetect_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (bgWorker_filedetect.CancellationPending != true)
+            {
+                if (Path_Lists.Count >= file_num + 1) 
+                {
+                    bgWorker_filedetect.ReportProgress(0);
+                    break;
+                }
+            }
+            Thread.Sleep(100);
+        }
+
+        private void bgWorker_filedetect_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            tb_Load_Path.Text = Path_Lists[file_num]; //執行此條的執行緒是在宣告background執行時的執行緒，所以會報例外，因為宣告此執行緒不是在UI執行緒
+            Load_file.PerformClick();
+        }
+
+        private void bgWorker_filedetect_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            bgWorker_filedetect.Dispose();
+        }
+
+        //-----------------------------------------------------------------------------
+        //-----------------------------------------------------------------------------
         private void bgWorker_Writetomofile_DoWork(object sender, DoWorkEventArgs e)
         {
             if (serialPort1.IsOpen)
@@ -443,7 +498,10 @@ namespace RF_Module_N920S
                 //tx = Read_All;
                 //serialPort1.Write(tx);
                 serialPort1.Write(file_bytes, 0, file_bytes.Length);
-                bgWorker_Writetomofile.ReportProgress(0);
+                if (serialPort1.BytesToWrite == 0)
+                {
+                    bgWorker_Writetomofile.ReportProgress(0);
+                }
             }
         }
 
@@ -474,9 +532,6 @@ namespace RF_Module_N920S
         //------------------------------讀取文件------------------------------------
         private void Load_file_Click(object sender, EventArgs e)
         {
-            Load_file.Enabled = false;
-            Send_btu.Enabled = true;
-            
             //-----以字串方式讀取-----
             //StreamReader str = new StreamReader(file_path);
             //Read_All = str.ReadToEnd();
@@ -494,6 +549,23 @@ namespace RF_Module_N920S
 
             Read_Name = Path.GetFileName(tb_Load_Path.Text);
             Read_file_Length = Convert.ToString(file_bytes.Length);
+
+            if (serialPort1.IsOpen)
+            {
+                DateTime c_time = new DateTime();
+
+                c_time = DateTime.Now;
+
+                int C_time_Min = c_time.Minute;
+                int C_time_Sec = c_time.Second;
+                int C_time_Millisec = c_time.Millisecond;
+
+                Time_show = Convert.ToString((C_time_Min * 60 + C_time_Sec) * 1000 + C_time_Millisec);
+
+                string file_info = Read_file_Length + ";" + Read_Name + ";" + Time_show;
+                tx = "tomofile" + ";" + file_info;
+                serialPort1.Write(tx);
+            }
         }
     }
 }
