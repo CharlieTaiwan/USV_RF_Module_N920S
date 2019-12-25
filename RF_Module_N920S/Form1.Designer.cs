@@ -61,6 +61,7 @@
             this.bgWorker_Writetomofile = new System.ComponentModel.BackgroundWorker();
             this.bgWorker_Writerestatus = new System.ComponentModel.BackgroundWorker();
             this.bgWorker_filedetect = new System.ComponentModel.BackgroundWorker();
+            this.bgWorker_checkfolder = new System.ComponentModel.BackgroundWorker();
             this.Control.SuspendLayout();
             this.file_control.SuspendLayout();
             this.Connect.SuspendLayout();
@@ -371,6 +372,12 @@
             this.bgWorker_filedetect.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgWorker_filedetect_ProgressChanged);
             this.bgWorker_filedetect.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_filedetect_RunWorkerCompleted);
             // 
+            // bgWorker_checkfolder
+            // 
+            this.bgWorker_checkfolder.WorkerReportsProgress = true;
+            this.bgWorker_checkfolder.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_checkfolder_DoWork);
+            this.bgWorker_checkfolder.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgWorker_checkfolder_ProgressChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -431,6 +438,7 @@
         private System.Windows.Forms.Button Autocheck_btu;
         private System.ComponentModel.BackgroundWorker bgWorker_filedetect;
         private System.Windows.Forms.Button StopCheck_btu;
+        private System.ComponentModel.BackgroundWorker bgWorker_checkfolder;
     }
 }
 

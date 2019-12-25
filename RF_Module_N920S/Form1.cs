@@ -51,8 +51,14 @@ namespace RF_Module_N920S
             ComPort.Items.AddRange(SerialPort.GetPortNames());
 
             Path_Lists = Directory.GetFiles(load_file_path, "*.dat").ToList();
-            tb_Load_Path.Text = Path_Lists[0];
+            if (Path_Lists.Count > 0)
+            {
+                tb_Load_Path.Text = Path_Lists[0];
+            }
 
+            FileSystemWatcher fileSystemWatcher = new FileSystemWatcher(load_file_path, "*.dat");
+            fileSystemWatcher.EnableRaisingEvents = true;
+            fileSystemWatcher.Created += watch_Created;
 
             if (ComPort.Items.Count > 0)
             {
@@ -141,9 +147,29 @@ namespace RF_Module_N920S
             Command_btu.Enabled = true;
             Data_btu.Enabled = false;
             Configurtion_btu.Enabled = false;
-            Load_file.Enabled = true;
             Connect_btu.Enabled = false;
             Disconnect_btu.Enabled = true;
+            bgWorker_checkfolder.RunWorkerAsync();
+        }
+
+        private void bgWorker_checkfolder_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (true)
+            {
+                if (Path_Lists.Count > 0)
+                {
+                    bgWorker_checkfolder.ReportProgress(0);
+                    break;
+                }
+                Thread.Sleep(100);
+            }
+            
+            
+        }
+
+        private void bgWorker_checkfolder_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            Load_file.Enabled = true;
         }
 
         private void Disconnect_btu_Click(object sender, EventArgs e)
@@ -236,9 +262,9 @@ namespace RF_Module_N920S
                                 bgWorker_Read.ReportProgress(1);
                             }else if(check_code == "complete")
                             {
-                                if(autotx == "OK")
+                                file_num += 1;
+                                if (autotx == "OK")
                                 {
-                                    file_num += 1;
                                     bgWorker_filedetect.RunWorkerAsync();
                                 }
                             }
@@ -446,11 +472,6 @@ namespace RF_Module_N920S
         private void Autocheck_btu_Click(object sender, EventArgs e)
         {
             autotx = "OK";
-            Autocheck_btu.Enabled = false;
-            FileSystemWatcher fileSystemWatcher = new FileSystemWatcher(load_file_path, "*.dat");
-            fileSystemWatcher.EnableRaisingEvents = true;
-            fileSystemWatcher.Created += watch_Created;
-            
         }
 
         private void watch_Created(object sender, FileSystemEventArgs e)
@@ -528,7 +549,7 @@ namespace RF_Module_N920S
         {
             bgWorker_Writerestatus.Dispose();
         }
-
+        string keepAutotx = "Yes";
         //------------------------------讀取文件------------------------------------
         private void Load_file_Click(object sender, EventArgs e)
         {
