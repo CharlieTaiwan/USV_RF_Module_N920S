@@ -33,6 +33,7 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.Connect_btu = new System.Windows.Forms.Button();
             this.Control = new System.Windows.Forms.GroupBox();
+            this.btu_path_ok = new System.Windows.Forms.Button();
             this.tb_Save_Path = new System.Windows.Forms.TextBox();
             this.tb_Load_Path = new System.Windows.Forms.TextBox();
             this.Save_Path = new System.Windows.Forms.Label();
@@ -75,7 +76,7 @@
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(623, 368);
+            this.textBox1.Size = new System.Drawing.Size(623, 425);
             this.textBox1.TabIndex = 0;
             // 
             // textBox2
@@ -98,6 +99,7 @@
             // 
             // Control
             // 
+            this.Control.Controls.Add(this.btu_path_ok);
             this.Control.Controls.Add(this.tb_Save_Path);
             this.Control.Controls.Add(this.tb_Load_Path);
             this.Control.Controls.Add(this.Save_Path);
@@ -111,21 +113,31 @@
             this.Control.Font = new System.Drawing.Font("新細明體", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Control.Location = new System.Drawing.Point(653, 12);
             this.Control.Name = "Control";
-            this.Control.Size = new System.Drawing.Size(355, 490);
+            this.Control.Size = new System.Drawing.Size(355, 541);
             this.Control.TabIndex = 3;
             this.Control.TabStop = false;
             this.Control.Text = "Control";
             // 
+            // btu_path_ok
+            // 
+            this.btu_path_ok.Location = new System.Drawing.Point(180, 333);
+            this.btu_path_ok.Name = "btu_path_ok";
+            this.btu_path_ok.Size = new System.Drawing.Size(160, 40);
+            this.btu_path_ok.TabIndex = 15;
+            this.btu_path_ok.Text = "OK";
+            this.btu_path_ok.UseVisualStyleBackColor = true;
+            this.btu_path_ok.Click += new System.EventHandler(this.btu_path_ok_Click);
+            // 
             // tb_Save_Path
             // 
-            this.tb_Save_Path.Location = new System.Drawing.Point(74, 286);
+            this.tb_Save_Path.Location = new System.Drawing.Point(74, 305);
             this.tb_Save_Path.Name = "tb_Save_Path";
             this.tb_Save_Path.Size = new System.Drawing.Size(266, 22);
             this.tb_Save_Path.TabIndex = 14;
             // 
             // tb_Load_Path
             // 
-            this.tb_Load_Path.Location = new System.Drawing.Point(74, 260);
+            this.tb_Load_Path.Location = new System.Drawing.Point(74, 279);
             this.tb_Load_Path.Name = "tb_Load_Path";
             this.tb_Load_Path.Size = new System.Drawing.Size(266, 22);
             this.tb_Load_Path.TabIndex = 1;
@@ -133,7 +145,7 @@
             // Save_Path
             // 
             this.Save_Path.AutoSize = true;
-            this.Save_Path.Location = new System.Drawing.Point(12, 289);
+            this.Save_Path.Location = new System.Drawing.Point(12, 308);
             this.Save_Path.Name = "Save_Path";
             this.Save_Path.Size = new System.Drawing.Size(50, 12);
             this.Save_Path.TabIndex = 13;
@@ -142,7 +154,7 @@
             // Load_Path
             // 
             this.Load_Path.AutoSize = true;
-            this.Load_Path.Location = new System.Drawing.Point(12, 263);
+            this.Load_Path.Location = new System.Drawing.Point(12, 282);
             this.Load_Path.Name = "Load_Path";
             this.Load_Path.Size = new System.Drawing.Size(52, 12);
             this.Load_Path.TabIndex = 11;
@@ -153,7 +165,7 @@
             this.file_control.Controls.Add(this.StopCheck_btu);
             this.file_control.Controls.Add(this.Load_file);
             this.file_control.Controls.Add(this.Autocheck_btu);
-            this.file_control.Location = new System.Drawing.Point(8, 326);
+            this.file_control.Location = new System.Drawing.Point(8, 377);
             this.file_control.Name = "file_control";
             this.file_control.Size = new System.Drawing.Size(341, 112);
             this.file_control.TabIndex = 10;
@@ -194,7 +206,7 @@
             // 
             // Clear_btu
             // 
-            this.Clear_btu.Location = new System.Drawing.Point(14, 444);
+            this.Clear_btu.Location = new System.Drawing.Point(14, 495);
             this.Clear_btu.Name = "Clear_btu";
             this.Clear_btu.Size = new System.Drawing.Size(160, 40);
             this.Clear_btu.TabIndex = 8;
@@ -344,7 +356,7 @@
             this.groupBox2.Controls.Add(this.textBox1);
             this.groupBox2.Location = new System.Drawing.Point(12, 107);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(635, 395);
+            this.groupBox2.Size = new System.Drawing.Size(635, 452);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Output";
@@ -383,7 +395,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1018, 509);
+            this.ClientSize = new System.Drawing.Size(1018, 571);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.Control);
@@ -439,6 +451,7 @@
         private System.ComponentModel.BackgroundWorker bgWorker_filedetect;
         private System.Windows.Forms.Button StopCheck_btu;
         private System.ComponentModel.BackgroundWorker bgWorker_checkfolder;
+        private System.Windows.Forms.Button btu_path_ok;
     }
 }
 

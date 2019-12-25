@@ -50,7 +50,38 @@ namespace RF_Module_N920S
 
             ComPort.Items.AddRange(SerialPort.GetPortNames());
 
-            Path_Lists = Directory.GetFiles(load_file_path, "*.dat").ToList();
+            if (ComPort.Items.Count > 0)
+            {
+                ComPort.SelectedIndex = 0;
+                btu_path_ok.Enabled = true;
+            }
+            else
+            {
+                btu_path_ok.Enabled = false;
+            }
+
+            BaudRate.SelectedIndex = 0;
+            Connect_btu.Enabled = false;
+            Autocheck_btu.Enabled = false;
+            Disconnect_btu.Enabled = false;
+            Load_file.Enabled = false;
+            Command_btu.Enabled = false;
+            Data_btu.Enabled = false;
+            Configurtion_btu.Enabled = false;
+        }
+
+        private void btu_path_ok_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Path_Lists = Directory.GetFiles(tb_Load_Path.Text, "*.dat").ToList();
+            }
+            catch
+            {
+                MessageBox.Show("不合法的路徑格式，程式即將關閉!!!","錯誤提醒",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                Close();
+            }
+            
             if (Path_Lists.Count > 0)
             {
                 tb_Load_Path.Text = Path_Lists[0];
@@ -60,24 +91,8 @@ namespace RF_Module_N920S
             fileSystemWatcher.EnableRaisingEvents = true;
             fileSystemWatcher.Created += watch_Created;
 
-            if (ComPort.Items.Count > 0)
-            {
-                ComPort.SelectedIndex = 0;
-                Connect_btu.Enabled = true;
-            }
-            else
-            {
-                Connect_btu.Enabled = false;
-            }
-
-            BaudRate.SelectedIndex = 0;
-
-            Autocheck_btu.Enabled = false;
-            Disconnect_btu.Enabled = false;
-            Load_file.Enabled = false;
-            Command_btu.Enabled = false;
-            Data_btu.Enabled = false;
-            Configurtion_btu.Enabled = false;
+            Connect_btu.Enabled = true;
+            btu_path_ok.Enabled = false;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -163,8 +178,6 @@ namespace RF_Module_N920S
                 }
                 Thread.Sleep(100);
             }
-            
-            
         }
 
         private void bgWorker_checkfolder_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -263,6 +276,7 @@ namespace RF_Module_N920S
                             }else if(check_code == "complete")
                             {
                                 file_num += 1;
+                                tb_Load_Path.Text = Path_Lists[file_num];
                                 if (autotx == "OK")
                                 {
                                     bgWorker_filedetect.RunWorkerAsync();
@@ -451,13 +465,14 @@ namespace RF_Module_N920S
             {
                 ComPort.Items.Clear();
                 ComPort.Text = "";
+                btu_path_ok.Enabled = false;
             }
             else
             {
                 ComPort.Items.Clear();
                 ComPort.Items.AddRange(SerialPort.GetPortNames());
                 ComPort.SelectedIndex = 0;
-                Connect_btu.Enabled = true;
+                btu_path_ok.Enabled = true;
             }
         }
 
@@ -549,10 +564,11 @@ namespace RF_Module_N920S
         {
             bgWorker_Writerestatus.Dispose();
         }
-        string keepAutotx = "Yes";
+        
         //------------------------------讀取文件------------------------------------
         private void Load_file_Click(object sender, EventArgs e)
         {
+
             //-----以字串方式讀取-----
             //StreamReader str = new StreamReader(file_path);
             //Read_All = str.ReadToEnd();
